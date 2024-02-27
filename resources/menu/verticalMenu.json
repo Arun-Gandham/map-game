@@ -1,0 +1,34 @@
+{
+  "menu": [
+    {
+      "url": "/admins",
+      "name": "Administrators",
+      "icon": "menu-icon tf-icons ti ti-users",
+      "slug": "admin.list"
+    },
+    {
+      "url": "/types",
+      "name": "Types",
+      "icon": "menu-icon tf-icons ti ti-files",
+      "slug": "pages-faq"
+    },
+    {
+      "url": "/games",
+      "name": "Games",
+      "icon": "menu-icon tf-icons ti ti-lifebuoy",
+      "slug": "pages-faq"
+    },
+    {
+      "url": "/admins",
+      "name": "Scores",
+      "icon": "menu-icon tf-icons ti ti-id",
+      "slug": "pages-faq"
+    },
+    {
+      "url": "/groups",
+      "name": "Groups",
+      "icon": "menu-icon tf-icons ti ti-color-swatch",
+      "slug": "group.list"
+    }
+  ]
+}
