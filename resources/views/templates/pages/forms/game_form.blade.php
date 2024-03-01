@@ -50,8 +50,8 @@
         <!-- Form Separator -->
         <div class="col">
             <div class="card mb-4">
-                <form class="card-body" method="POST"
-                    action="{{ isset($game) ? route('game.edit.submit') : route('game.add.submit') }}">
+            <form method="POST" action="{{ isset($game) ? route('game.edit.submit') : route('game.add.submit') }}" 
+            enctype="multipart/form-data">
                     @csrf
                     <div class="row mb-3">
                         <div class="col-md-6">
@@ -62,33 +62,26 @@
                                         <input type="text" class="form-control" placeholder="Name" name="name"
                                             value="{{ isset($game) ? $game->name : '' }}" required>
                                     </div>
-                                    <div class="col-12">
-                                    <form action="upload.php" method="post" enctype="multipart/form-data">
-                                    <label class="col-sm-3 col-form-label" for="image">selct an image</label>
-                                    <div class="col-sm-11">
-                                        <input type="file" class="form-control" id="image" name="image" accept="image/*"
-                                            value="{{ isset($game) ? $game->image : '' }}" required>
-                                            </form>
-                                    </div>
                                 </div>
-                               
-                                
                                 <div class="col-12">
-                                    <label class="col-sm-3 col-form-label" for="multicol-username">Max Time</label>
-                                    <div class="col-sm-11">
-                                        <input type="number" class="form-control" placeholder="max_time" name="max_time"
-                                            value="{{ isset($game) ? $game->max_time : '' }}" required>
-                                    </div>
+                                <label class="col-sm-3 col-form-label" for="multicol-username">Max Time (in seconds)</label>
+                                <div class="col-sm-11">
+                                <input type="number" class="form-control" placeholder="Max Time (in seconds)" name="max_time" value="{{ isset($game) ? $game->max_time : '' }}" required>
+                                </div>
                                 </div>
 
-                            
-                            </div>
-                        </div>
+                            <div class="col-12">
+                          <label class="col-sm-3 col-form-label" for="multicol-username">Browse Image</label>
+                         <div class="col-sm-11">
+                        <input type="file" class="form-control" name="image" accept="image/*">
+                    </div>
+                   </div>
 
+                    
                         <div class="col-md-6">
                             <div>
                                 <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-                                <textarea class="form-control" rows="6" name="description" required>{{ isset($group) ? $group->description : '' }}</textarea>
+                                <textarea class="form-control" rows="6" name="description" required>{{ isset($game) ? $game->description : '' }}</textarea>
                             </div>
                         </div>
 
@@ -105,31 +98,6 @@
                         </div>
                 </form>
             </div>
-        </div>
-    </div>
-    
-    </div>
-   
-    <div class="d-flex justify-content-between">
-        <h4 class="py-3 mb-3">
-            <span class="text-muted fw-light">Points/</span> List
-        </h4>
-        <a href="{{ route('group.add') }}"><button class="btn btn-primary mt-2" style="padding: 15px;height: 30px;"><i
-                    class="fa-solid fa-plus"></i>
-                Add</button></a>
-    </div>
-    <div class="card">
-        <div class="card-datatable table-responsive pt-0">
-            <table id="data-table" class="datatables-basic table">
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Type</th>
-                        <th>Distance</th>
-                        <th>Points</th>
-                    </tr>
-                </thead>
-            </table>
         </div>
     </div>
 

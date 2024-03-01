@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Models\Game;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -20,37 +19,34 @@ class GameController extends Controller
     }
 
     public function datatblesList(Request $request)
+    {
+        $data = Group::select(['id', 'name', 'max_time', 'no_of_scores', 'image', 'description'])->orderBy('id', 'desc');
+        return DataTables::of($data)
+            ->addColumn('actions', function(Game $game) {
+                return '<div class="d-flex">
+                    <a href="'.route('game.delete',$game->id).'" class="mx-2"><i class="fa-solid fa-trash"></i></a>
+                    <span class="border border-right-0 border-light"></span>
+                    <a href="'.route('game.edit',$game->id).'" class="mx-2"><i class="fa-solid fa-edit"></i></a>
+                </div>';
+            })
+            ->addColumn('link', function(Game $game) {
+                return '<a href="" class="mx-2">Frontend Link</a>';
+            })
+            ->addColumn('scores', function(Game $game) {
+                return '<a href="" class="mx-2">Scores</a>';
+            })
+            ->rawColumns(['actions', 'link', 'scores'])
+            ->make(true);
+    }
     
-        {
-            $data = Game::select(['id', 'name', 'max_time','image'])->orderBy('id','desc'); // Use the Game model and desired columns
-            return DataTables::of($data)
-                ->addColumn('actions', function(Game $game) {
-                    return '<div class="d-flex">
-                        <a href="'.route('game.delete', $game->id).'" class="mx-2"><i class="fa-solid fa-trash"></i></a>
-                        <span class="border border-right-0 border-light"></span>
-                        <a href="'.route('game.edit', $game->id).'" class="mx-2"><i class="fa-solid fa-edit"></i></a>
-                    </div>';
-                })
-                ->addColumn('image', function(Game $game) {
-                    return '<div class="">
-                    <img src="'.$game->image.'">
-                    </div>';
-                })
-                ->addColumn('link', function(Game $game) {
-                    return '<a href="" class="mx-2">Frontend Link</a>';
-                })
-             
-                
-                ->rawColumns(['actions', 'link','image'])
-                ->make(true);
-            }
+
     
     public function delete($id)
     {
         $user = Game::where('id',$id)->delete();
         if($user)
         {
-            return redirect()->back()->with('success','Player deleted succesfully');
+            return redirect()->back()->with('success','Game deleted succesfully');
         }
 
         return redirect()->back()->with('error','Something went wrong');
@@ -69,41 +65,55 @@ class GameController extends Controller
     public function editSubmit(Request $req)
     {
         $game = Game::findOrFail($req->id);
-
-        if(!$game)
-        {
-            return redirect()->back()->with('error','game not exist!!!');
+    
+        if (!$game) {
+            return redirect()->back()->with('error', 'Game not exist!!!');
         }
-
+    
         $game->name = $req->name;
-        $game-> image= $req->image;
+        $game->max_time = $req->max_time;
+        $game->no_of_scores = $req->no_of_scores;
+        // Handle image upload if required
+        $game->image = $req->file('image')->store('images/games', 'public'); // Example: storing image
         $game->description = $req->description;
-        
-        
-        if($game->save())
-        {
-            return redirect()->route('game.list')->with('success','Succesfully updated');
-        }
-        else
-        {
-            return redirect()->route('game.list')->with('error','Something went wrong');
+    
+        if ($game->save()) {
+            return redirect()->route('game.list')->with('success', 'Successfully updated');
+        } else {
+            return redirect()->route('game.list')->with('error', 'Something went wrong');
         }
     }
+    
 
+  
     public function addSubmit(Request $req)
     {
-        // return $req->all();
-        $game = Game::create(
-            ['name' => $req->name,   'image'=> $req->image, 'description' => $req->description,'max_time' => $req->max_time]
-        );
-
-        if($game)
-        {
-            return redirect()->route('game.list')->with('success','Succesfully created');
+        // Validate the request data including the uploaded file
+        $req->validate([
+            'name' => 'required',
+            'max_time' => 'required|numeric',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Example validation rules for image upload
+            'description' => 'required',
+        ]);
+    
+        // Handle the file upload
+        if ($req->hasFile('image')) {
+            // Store the uploaded file and get its path
+            $imagePath = $req->file('image')->store('images', 'public');
+    
+            // Now you can save the $imagePath to your database or perform any other necessary actions
         }
-        else
-        {
-            return redirect()->route('game.list')->with('error','Something went wrong');
-        }
+    
+        // Create new game record with validated data
+        $game = new Game();
+        $game->name = $req->name;
+        $game->max_time = $req->max_time;
+        $game->image = $imagePath; // Save the file path to the image field in your database
+        $game->description = $req->description;
+        $game->save();
+    
+        // Redirect back with success message
+        return redirect()->route('game.list')->with('success', 'Successfully created');
     }
+
 }

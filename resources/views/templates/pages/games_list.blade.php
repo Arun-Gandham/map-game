@@ -48,7 +48,7 @@
 
     <div class="d-flex justify-content-between">
         <h4 class="py-3 mb-3">
-            <span class="text-muted fw-light">Game /</span> List
+            <span class="text-muted fw-light">Games /</span> List
         </h4>
         <a href="{{ route('game.add') }}"><button class="btn btn-primary mt-2" style="padding: 15px;height: 30px;"><i
                     class="fa-solid fa-plus"></i>
@@ -63,14 +63,16 @@
                     <tr>
                         <th>Name</th>
                         <th>Max Time</th>
-                        <th>Image</th>
+                        <th>No Of Scores</th>
                         <th>Frontend Link</th>
+                        <th>Scores</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
             </table>
         </div>
     </div>
+
     <!--/ DataTable with Buttons -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -83,15 +85,17 @@
                         data: 'name'
                     },
                     {
-                        data: 'max_time'
+                        data: 'max_time_seconds'
                     },
                     {
-                        data: 'image'
+                        data: 'no_of_scores'
                     },
                     {
                         data: 'link'
                     },
-
+                    {
+                        data: 'scores'
+                    },
                     {
                         data: 'actions'
                     }

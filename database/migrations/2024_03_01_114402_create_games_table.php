@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('games', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('max_time')->default(0);
-            $table->mediumText('image');
-            $table->string('description');
+            $table->integer('max_time_seconds');
+            $table->string('image')->nullable();
+            $table->text('description');
             $table->timestamps();
         });
     }
