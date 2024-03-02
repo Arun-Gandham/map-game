@@ -55,13 +55,7 @@ class PointController extends Controller
     {
         $data = Point::where('game_id', $id)->orderBy('id', 'desc')->get(); // Replace with your model and desired columns
         return DataTables::of($data)
-            ->addColumn('actions', function (Point $point) {
-                return '<div class="d-flex">
-                    <a href="' . route('group.delete', $point->id) . '" class="mx-2"><i class="fa-solid fa-trash"></i></a>
-                    <span class="border border-right-0 border-light"></span>
-                    <a href="' . route('group.edit', $point->id) . '" class="mx-2"><i class="fa-solid fa-edit"></i></a>
-                    </div>';
-            })
+          
             ->addColumn('type_name', function (Point $point) {
                 return $point->type_obj->name;
             })

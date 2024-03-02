@@ -131,3 +131,20 @@ Route::get('/points/datatables/{id}', [PointController::class, 'datatblesList'])
 //Route::post('/points/edit/submit', [PointController::class, 'editSubmit'])->name('point.edit.submit');
 
 //Route::get('/points/delete/{id}', [PointController::class, 'delete'])->name('point.delete');
+
+
+//View Game
+
+Route::get('/viewgames', [GameController::class, 'List'])->name('viewgame.list');
+
+Route::get('/viewgames/add', [GameController::class, 'add'])->name('viewgame.add');
+
+Route::post('/viewgames/add/submit', [GameController::class, 'addSubmit'])->name('viewgame.add.submit');
+
+Route::get('/viewgames/edit/{id}', [GameController::class, 'edit'])->name('viewgame.edit');
+
+Route::post('/viewgames/edit/submit', [GameController::class, 'editSubmit'])->name('viewgame.edit.submit');
+
+Route::get('/viewgames/delete/{id}', [GameController::class, 'delete'])->name('viewgame.delete');
+
+Route::get('/viewgames/datatables', [GameController::class, 'datatblesList'])->name('viewgame.list.datatbles');
