@@ -29,6 +29,9 @@ class GameController extends Controller
                     <a href="' . route('game.edit', $game->id) . '" class="mx-2"><i class="fa-solid fa-edit"></i></a>
                 </div>';
             })
+            ->addColumn('type_name', function (Game $game) {
+                return $game->type;
+            })
             ->addColumn('link', function (Game $game) {
                 return '<a href="" class="mx-2">Frontend Link</a>';
             })

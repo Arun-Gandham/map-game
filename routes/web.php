@@ -1,16 +1,16 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\GroupController;
-use App\Http\Controllers\TypeController;
-use App\Http\Controllers\GameController;
-use App\Http\Controllers\PointController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GameController;
+use App\Http\Controllers\GroupController;
+use App\Http\Controllers\PointController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TypeController;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,8 +20,7 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "web" middleware group. Make something great!
 |
-*/
-
+ */
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -33,60 +32,59 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-    Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('login');
+Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('login');
 
-    Route::post('/', [AuthenticatedSessionController::class, 'store'])->name('login.submit');
+Route::post('/', [AuthenticatedSessionController::class, 'store'])->name('login.submit');
 
-    Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
 
-    Route::post('/register', [RegisteredUserController::class, 'store'])->name('register.submit');
+Route::post('/register', [RegisteredUserController::class, 'store'])->name('register.submit');
 
-    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
-                ->name('logout');
+Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
+    ->name('logout');
 
-    Route::get('/dashboard', [DashboardController::class, 'Home'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'Home'])->name('dashboard');
 
-    //Admins
+//Admins
 
-    Route::get('/admins', [AdminController::class, 'List'])->name('admin.list');
+Route::get('/admins', [AdminController::class, 'List'])->name('admin.list');
 
-    Route::get('/admins/add', [AdminController::class, 'add'])->name('admin.add');
+Route::get('/admins/add', [AdminController::class, 'add'])->name('admin.add');
 
-    Route::post('/admins/add/submit', [AdminController::class, 'addSubmit'])->name('admin.add.submit');
+Route::post('/admins/add/submit', [AdminController::class, 'addSubmit'])->name('admin.add.submit');
 
-    Route::get('/admins/edit/{id}', [AdminController::class, 'edit'])->name('admin.edit');
+Route::get('/admins/edit/{id}', [AdminController::class, 'edit'])->name('admin.edit');
 
-    Route::post('/admins/edit/submit', [AdminController::class, 'editSubmit'])->name('admin.edit.submit');
+Route::post('/admins/edit/submit', [AdminController::class, 'editSubmit'])->name('admin.edit.submit');
 
-    Route::get('/admins/delete/{id}', [AdminController::class, 'delete'])->name('admin.delete');
+Route::get('/admins/delete/{id}', [AdminController::class, 'delete'])->name('admin.delete');
 
-    Route::get('/admins/datatables', [AdminController::class, 'datatblesList'])->name('admin.list.datatbles');
-    
-    // Groups
+Route::get('/admins/datatables', [AdminController::class, 'datatblesList'])->name('admin.list.datatbles');
 
-    Route::get('/groups', [GroupController::class, 'List'])->name('group.list');
+// Groups
 
-    Route::get('/groups/datatables', [GroupController::class, 'datatblesList'])->name('group.list.datatbles');
+Route::get('/groups', [GroupController::class, 'List'])->name('group.list');
 
-    Route::get('/groups/add', [GroupController::class, 'add'])->name('group.add');
+Route::get('/groups/datatables', [GroupController::class, 'datatblesList'])->name('group.list.datatbles');
 
-    Route::post('/groups/add/submit', [GroupController::class, 'addSubmit'])->name('group.add.submit');
+Route::get('/groups/add', [GroupController::class, 'add'])->name('group.add');
 
-    Route::get('/groups/edit/{id}', [GroupController::class, 'edit'])->name('group.edit');
+Route::post('/groups/add/submit', [GroupController::class, 'addSubmit'])->name('group.add.submit');
 
-    Route::post('/groups/edit/submit', [GroupController::class, 'editSubmit'])->name('group.edit.submit');
+Route::get('/groups/edit/{id}', [GroupController::class, 'edit'])->name('group.edit');
 
-    Route::get('/groups/delete/{id}', [GroupController::class, 'delete'])->name('group.delete');
+Route::post('/groups/edit/submit', [GroupController::class, 'editSubmit'])->name('group.edit.submit');
 
-    Route::post('/forgot-password/submit', [PasswordResetLinkController::class, 'passwordResetSubmit'])->name('password.reset.submit');
+Route::get('/groups/delete/{id}', [GroupController::class, 'delete'])->name('group.delete');
 
-    Route::get('/reset-password', [PasswordResetLinkController::class, 'passwordResetConfirm'])->name('password.reset.comfirm');
+Route::post('/forgot-password/submit', [PasswordResetLinkController::class, 'passwordResetSubmit'])->name('password.reset.submit');
 
-    Route::post('/reset-password/submit', [PasswordResetLinkController::class, 'passwordResetConfirmSubmit'])->name('password.reset.comfirm.submit');
-require __DIR__.'/auth.php';
+Route::get('/reset-password', [PasswordResetLinkController::class, 'passwordResetConfirm'])->name('password.reset.comfirm');
+
+Route::post('/reset-password/submit', [PasswordResetLinkController::class, 'passwordResetConfirmSubmit'])->name('password.reset.comfirm.submit');
+require __DIR__ . '/auth.php';
 
 // Types
-
 
 Route::get('/types', [TypeController::class, 'List'])->name('type.list');
 
@@ -122,15 +120,14 @@ Route::get('/games/datatables', [GameController::class, 'datatblesList'])->name(
 
 Route::get('/points', [PointController::class, 'List'])->name('point.list');
 
-Route::get('/points/add', [PointController::class, 'add'])->name('point.add');
+Route::get('/points/{id}/add', [PointController::class, 'add'])->name('point.add');
 
 Route::post('/points/add/submit', [PointController::class, 'addSubmit'])->name('point.add.submit');
+
+Route::get('/points/datatables/{id}', [PointController::class, 'datatblesList'])->name('point.list.datatbles');
 
 //Route::get('/points/edit/{id}', [PointController::class, 'edit'])->name('point.edit');
 
 //Route::post('/points/edit/submit', [PointController::class, 'editSubmit'])->name('point.edit.submit');
 
 //Route::get('/points/delete/{id}', [PointController::class, 'delete'])->name('point.delete');
-
-//Route::get('/points/datatables', [PointController::class, 'datatblesList'])->name('point.list.datatbles');
-

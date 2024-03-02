@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 02, 2024 at 11:47 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Generation Time: Mar 02, 2024 at 12:32 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.1.17
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -58,7 +58,8 @@ CREATE TABLE `games` (
 --
 
 INSERT INTO `games` (`id`, `name`, `max_time`, `image`, `description`, `created_at`, `updated_at`) VALUES
-(1, 'test game123', 123, 'images/XsuPiiYhel1ivEb38dPFeTwSQWynd36BjlRf1QLW.jpg', 'tet', '2024-03-02 01:17:50', '2024-03-02 01:17:50');
+(1, 'test game123', 123, 'images/XsuPiiYhel1ivEb38dPFeTwSQWynd36BjlRf1QLW.jpg', 'tet', '2024-03-02 01:17:50', '2024-03-02 01:17:50'),
+(2, 'test', 123, 'images/pUIJWIN1YTTFjJRK7O1xS1t1Hgiq7cGfohdfNvpY.jpg', 'test', '2024-03-02 05:24:32', '2024-03-02 05:24:32');
 
 -- --------------------------------------------------------
 
@@ -150,14 +151,28 @@ CREATE TABLE `personal_access_tokens` (
 
 CREATE TABLE `points` (
   `id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(200) NOT NULL,
+  `game_id` int(11) NOT NULL,
   `type` int(11) NOT NULL,
-  `lat&long` decimal(10,6) NOT NULL,
+  `lat_long` varchar(100) NOT NULL,
   `distance` int(11) NOT NULL,
   `image` varchar(255) DEFAULT NULL,
   `description` text NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `question` text NOT NULL,
+  `question_des` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `points`
+--
+
+INSERT INTO `points` (`id`, `title`, `game_id`, `type`, `lat_long`, `distance`, `image`, `description`, `created_at`, `updated_at`, `question`, `question_des`) VALUES
+(1, '243', 0, 6, '1234123', 41234123, NULL, 'tsesers', '2024-03-02 05:35:00', '2024-03-02 05:35:00', 'tsesers', 'tsesers'),
+(2, '', 0, 6, '1234123', 41234123, NULL, 'tsesers', '2024-03-02 05:35:14', '2024-03-02 05:35:14', 'tsesers', 'tsesers'),
+(3, 'sadfasd', 2, 5, '234423,234243', 234234, NULL, 'tests', '2024-03-02 05:39:55', '2024-03-02 05:39:55', 'tests', 'tests'),
+(4, 'fasdfasd', 2, 6, '23423234', 324234, NULL, '24234234', '2024-03-02 05:40:41', '2024-03-02 05:40:41', '24234234', '24234234');
 
 -- --------------------------------------------------------
 
@@ -179,7 +194,8 @@ CREATE TABLE `types` (
 --
 
 INSERT INTO `types` (`id`, `name`, `color`, `description`, `created_at`, `updated_at`) VALUES
-(5, 'sdfghjkl', NULL, 'dfghjkl;', '2024-02-27 11:21:47', '2024-02-27 11:21:47');
+(5, 'sdfghjkl', NULL, 'dfghjkl;', '2024-02-27 11:21:47', '2024-02-27 11:21:47'),
+(6, 'test', NULL, 'wetw', '2024-03-02 05:25:19', '2024-03-02 05:25:19');
 
 -- --------------------------------------------------------
 
@@ -282,7 +298,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `games`
 --
 ALTER TABLE `games`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `groups`
@@ -306,13 +322,13 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `points`
 --
 ALTER TABLE `points`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `types`
 --
 ALTER TABLE `types`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `users`

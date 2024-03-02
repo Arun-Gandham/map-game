@@ -101,51 +101,53 @@
         </div>
     </div>
     <!-- DataTable with Buttons -->
-    <div class="card">
+    @if (isset($game))
+        <div class="card">
 
-        <div class="card-datatable table-responsive pt-0">
-            <div class="m-3 d-flex justify-content-between">
-                <h3>Points</h3>
-                <a href="{{ route('point.add') }}"><button class="btn btn-primary mt-2" style="padding: 15px;height: 30px;"><i
-                        class="fa-solid fa-plus"></i>
-                    Add</button></a>
+            <div class="card-datatable table-responsive pt-0">
+                <div class="m-3 d-flex justify-content-between">
+                    <h3>Points</h3>
+                    <a href="{{ route('point.add', $game->id) }}"><button class="btn btn-primary mt-2"
+                            style="padding: 15px;height: 30px;"><i class="fa-solid fa-plus"></i>
+                            Add</button></a>
+                </div>
+
+                <table id="data-table" class="datatables-basic table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Type</th>
+                            <th>Distance</th>
+                            <th>Points</th>
+                        </tr>
+                    </thead>
+                </table>
             </div>
-
-            <table id="data-table" class="datatables-basic table">
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Type</th>
-                        <th>Distance</th>
-                        <th>Points</th>
-                    </tr>
-                </thead>
-            </table>
         </div>
-    </div>
 
-    <!--/ DataTable with Buttons -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#data-table').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: '{{ route('game.list.datatbles') }}',
-                columns: [{
-                        data: 'name'
-                    },
-                    {
-                        data: 'max_time'
-                    },
-                    {
-                        data: 'scores'
-                    },
-                    {
-                        data: 'link'
-                    }
-                ]
+        <!--/ DataTable with Buttons -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('#data-table').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: '{{ route('point.list.datatbles', $game->id) }}',
+                    columns: [{
+                            data: 'title'
+                        },
+                        {
+                            data: 'type_name'
+                        },
+                        {
+                            data: 'distance'
+                        },
+                        {
+                            data: 'points'
+                        }
+                    ]
+                });
             });
-        });
-    </script>
+        </script>
+    @endif
 @endsection

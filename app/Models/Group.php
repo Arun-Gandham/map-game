@@ -14,6 +14,7 @@ class Group extends Model
         'game_id',
         'p_count',
         'date',
-        'description'
+        'description',
     ];
+
 }
