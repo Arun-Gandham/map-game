@@ -106,7 +106,9 @@
         <div class="card-datatable table-responsive pt-0">
             <div class="m-3 d-flex justify-content-between">
                 <h3>Points</h3>
-                <button type="submit" class="btn btn-primary me-sm-2 me-1 waves-effect waves-light">Add</button>
+                <a href="{{ route('point.add') }}"><button class="btn btn-primary mt-2" style="padding: 15px;height: 30px;"><i
+                        class="fa-solid fa-plus"></i>
+                    Add</button></a>
             </div>
 
             <table id="data-table" class="datatables-basic table">

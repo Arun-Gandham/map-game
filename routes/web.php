@@ -9,6 +9,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\PointController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 /*
 |--------------------------------------------------------------------------
@@ -116,3 +117,20 @@ Route::post('/games/edit/submit', [GameController::class, 'editSubmit'])->name('
 Route::get('/games/delete/{id}', [GameController::class, 'delete'])->name('game.delete');
 
 Route::get('/games/datatables', [GameController::class, 'datatblesList'])->name('game.list.datatbles');
+
+//points
+
+Route::get('/points', [PointController::class, 'List'])->name('point.list');
+
+Route::get('/points/add', [PointController::class, 'add'])->name('point.add');
+
+Route::post('/points/add/submit', [PointController::class, 'addSubmit'])->name('point.add.submit');
+
+//Route::get('/points/edit/{id}', [PointController::class, 'edit'])->name('point.edit');
+
+//Route::post('/points/edit/submit', [PointController::class, 'editSubmit'])->name('point.edit.submit');
+
+//Route::get('/points/delete/{id}', [PointController::class, 'delete'])->name('point.delete');
+
+//Route::get('/points/datatables', [PointController::class, 'datatblesList'])->name('point.list.datatbles');
+
