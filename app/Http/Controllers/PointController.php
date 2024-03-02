@@ -49,7 +49,7 @@ class PointController extends Controller
         $point->question_des = $req->question_des;
         $options = [];
         foreach ($req->options as $key => $optionEach) {
-            $options[$key] = $optionEach['options'];
+            $options[$key] = $optionEach['option'];
         }
         
         $point->options = serialize($options);
@@ -63,7 +63,7 @@ class PointController extends Controller
     {
         $data = Point::where('game_id', $id)->orderBy('id', 'desc')->get(); // Replace with your model and desired columns
         return DataTables::of($data)
-          
+
             ->addColumn('type_name', function (Point $point) {
                 return $point->type_obj->name;
             })
