@@ -51,6 +51,7 @@ class PointController extends Controller
         foreach ($req->options as $key => $optionEach) {
             $options[$key] = $optionEach['options'];
         }
+        
         $point->options = serialize($options);
         $point->save();
 

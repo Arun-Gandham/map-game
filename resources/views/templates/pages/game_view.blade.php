@@ -51,8 +51,11 @@
         <!-- Form Separator -->
         <div class="col">
             <div class="card mb-4">
+            
                 <div class="row mb-3 p-4">
+                    
                     <ul class="list-unstyled mb-4 mt-3">
+                        
                         <li class="d-flex align-items-center mb-3"><i class="ti ti-user text-heading"></i><span
                                 class="fw-medium mx-2 text-heading">Game Name:</span> <span>{{ $game->name }}</span></li>
                         <li class="d-flex align-items-center mb-3"><i class="ti ti-check text-heading"></i><span
@@ -68,6 +71,10 @@
                             <div class="col-sm-9">
                                 <a href="{{ route('game.edit', $game->id) }}" class="text-white"><button type="submit"
                                         class="btn btn-primary me-sm-2 me-1 waves-effect waves-light">Edit</button></a>
+                                        <a href="{{ route('group.list', $game->id) }}" class="text-white"><button type="Groups"
+                                        class="btn btn-primary me-sm-2 me-1 waves-effect waves-light">Groups</button></a>
+                                        <a href="{{ route('score.list', $game->id) }}" class="text-white"><button type="View scores"
+                                        class="btn btn-primary me-sm-2 me-1 waves-effect waves-light">View scores</button></a>
                             </div>
                         </div>
                     </div>

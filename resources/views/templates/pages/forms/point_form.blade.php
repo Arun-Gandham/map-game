@@ -167,7 +167,7 @@
 
                                                     </div>
                                                     <div class="mb-3 col-lg-2 col-xl-2 col-12">
-                                                        <button class="btn btn-label-danger" data-repeater-delete>
+                                                        <button class="btn btn-label-danger" type="button" data-repeater-delete>
                                                             <i class="ti ti-x ti-xs me-1"></i>
                                                             <span class="align-middle">Delete</span>
                                                         </button>
