@@ -67,7 +67,13 @@
                                         </select>
                                     </div>
                                 </div>
-
+                                <div class="col-12">
+                                    <label class="col-sm-3 col-form-label" for="multicol-username">Title</label>
+                                    <div class="col-sm-11">
+                                        <input type="text" class="form-control" placeholder="Title" name="title"
+                                            value="{{ isset($point) ? $point->lat & long : '' }}" required>
+                                    </div>
+                                </div>
                                 <div class="col-12">
                                     <label class="col-sm-3 col-form-label" for="multicol-username">Lat & Long</label>
                                     <div class="col-sm-11">
@@ -113,6 +119,67 @@
                                     <button class="btn btn-label-secondary waves-effect"><a
                                             href="{{ route('group.list') }}">Cancel</a></button>
                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-12">
+                                    <label for="typeSelect" class="col-sm-3 col-form-label">Question</label>
+                                    <div class="col-sm-11">
+                                        <input type="text" class="form-control" placeholder="Question"
+                                            name="question" value="{{ isset($point) ? $point->lat & long : '' }}"
+                                            required>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="col-md-6 col-sm-3 col-form-label" for="multicol-username">Question
+                                        Description</label>
+                                    <div class="col-sm-11">
+                                        <input type="text" class="form-control" placeholder="Question Description"
+                                            name="question_des" value="{{ isset($point) ? $point->lat & long : '' }}"
+                                            required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-12">
+                                    <label class="col-sm-3 col-form-label" for="multicol-username">Option</label>
+                                    <div class="col-sm-11">
+                                        <input type="text" class="form-control" placeholder="Option" name="options[]"
+                                            value="{{ isset($point) ? $point->lat & long : '' }}" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="col-sm-3 col-form-label" for="multicol-username">Option</label>
+                                    <div class="col-sm-11">
+                                        <input type="text" class="form-control" placeholder="Option" name="options[]"
+                                            value="{{ isset($point) ? $point->lat & long : '' }}" required>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-12">
+                                    <label class="col-sm-3 col-form-label" for="multicol-username">Option</label>
+                                    <div class="col-sm-11">
+                                        <input type="text" class="form-control" placeholder="Option" name="options[]"
+                                            value="{{ isset($point) ? $point->lat & long : '' }}" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="col-sm-3 col-form-label" for="multicol-username">Option</label>
+                                    <div class="col-sm-11">
+                                        <input type="text" class="form-control" placeholder="Option" name="options[]"
+                                            value="{{ isset($point) ? $point->lat & long : '' }}" required>
+                                    </div>
+                                </div>
+
+
                             </div>
                         </div>
                 </form>

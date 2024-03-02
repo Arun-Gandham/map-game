@@ -37,6 +37,7 @@ class PointController extends Controller
         $point->type = $req->type;
         $point->lat_long = $req->latitude;
         $point->game_id = $req->game_id;
+        $point->title = $req->title;
 
         $point->distance = $req->distance;
         $point->image = $imagePath ?? null; // Save the file path to the image field in your database
