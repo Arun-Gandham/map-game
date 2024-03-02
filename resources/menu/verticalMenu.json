@@ -19,10 +19,10 @@
       "slug": "pages-faq"
     },
     {
-      "url": "/admins",
+      "url": "/scores",
       "name": "Scores",
       "icon": "menu-icon tf-icons ti ti-id",
-      "slug": "pages-faq"
+      "slug": "score.list"
     },
     {
       "url": "/groups",

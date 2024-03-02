@@ -8,6 +8,7 @@ use App\Http\Controllers\GameController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\PointController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ScoresController;
 use App\Http\Controllers\TypeController;
 use Illuminate\Support\Facades\Route;
 
@@ -132,7 +133,6 @@ Route::get('/points/datatables/{id}', [PointController::class, 'datatblesList'])
 
 //Route::get('/points/delete/{id}', [PointController::class, 'delete'])->name('point.delete');
 
-
 //View Game
 
 Route::get('/viewgames', [GameController::class, 'List'])->name('viewgame.list');
@@ -148,3 +148,9 @@ Route::post('/viewgames/edit/submit', [GameController::class, 'editSubmit'])->na
 Route::get('/viewgames/delete/{id}', [GameController::class, 'delete'])->name('viewgame.delete');
 
 Route::get('/viewgames/datatables', [GameController::class, 'datatblesList'])->name('viewgame.list.datatbles');
+
+//Scores
+
+Route::get('/scores', [ScoresController::class, 'List'])->name('score.list');
+
+Route::get('/scores/datatables', [ScoresController::class, 'datatblesList'])->name('score.list.datatbles');
