@@ -16,6 +16,8 @@ class PointController extends Controller
     }
     public function addSubmit(Request $req)
     {
+
+        // return $req->all();
         // Validate the request data including the uploaded file
         // $req->validate([
 
@@ -42,9 +44,14 @@ class PointController extends Controller
         $point->distance = $req->distance;
         $point->image = $imagePath ?? null; // Save the file path to the image field in your database
         $point->description = $req->description;
-        $point->question = $req->description;
-        $point->question_des = $req->description;
-
+        $point->question = $req->question;
+        $point->question_des = $req->question_des;
+        $point->question_des = $req->question_des;
+        $options = [];
+        foreach ($req->options as $key => $optionEach) {
+            $options[$key] = $optionEach['options'];
+        }
+        $point->options = serialize($options);
         $point->save();
 
         // Redirect back with success message

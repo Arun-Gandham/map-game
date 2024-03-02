@@ -73,10 +73,10 @@ class GameController extends Controller
         $game->max_time = $req->max_time;
         $game->no_of_scores = $req->no_of_scores;
         // Handle image upload if required
-        $game->image = $req->file('image')->store('images/games', 'public'); // Example: storing image
         $game->description = $req->description;
 
         if ($game->save()) {
+
             return redirect()->route('game.list')->with('success', 'Successfully updated');
         } else {
             return redirect()->route('game.list')->with('error', 'Something went wrong');
@@ -85,29 +85,27 @@ class GameController extends Controller
 
     public function addSubmit(Request $req)
     {
-        // Validate the request data including the uploaded file
-        $req->validate([
-            'name' => 'required',
-            'max_time' => 'required|numeric',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Example validation rules for image upload
-            'description' => 'required',
-        ]);
-
-        // Handle the file upload
-        if ($req->hasFile('image')) {
-            // Store the uploaded file and get its path
-            $imagePath = $req->file('image')->store('images', 'public');
-
-            // Now you can save the $imagePath to your database or perform any other necessary actions
-        }
 
         // Create new game record with validated data
         $game = new Game();
         $game->name = $req->name;
         $game->max_time = $req->max_time;
-        $game->image = $imagePath; // Save the file path to the image field in your database
+        $game->image = serialize([]);
+
         $game->description = $req->description;
-        $game->save();
+        if ($game->save()) {
+            $paths = [];
+            $count = 1;
+            foreach ($req->file('images') as $file) {
+                $filename = time() . '_' . $count . '_' . $file->getClientOriginalName();
+                $file->move(public_path("uploads/games/{$game->id}"), $filename);
+                $paths[] = "uploads/products/{$game->id}/{$filename}";
+                $count++;
+            }
+            $game->image = serialize($paths);
+            $game->save();
+
+        }
 
         // Redirect back with success message
         return redirect()->route('game.list')->with('success', 'Successfully created');
