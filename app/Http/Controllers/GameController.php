@@ -18,6 +18,15 @@ class GameController extends Controller
         return view('templates.pages.forms.game_form');
     }
 
+    public function view($id)
+    {
+        $game = Game::where('id', $id)->first();
+        if (!$game) {
+            return redirect()->back()->with('error', 'Game not exist!!!');
+        }
+        return view('templates.pages.game_view', compact('game'));
+    }
+
     public function datatblesList(Request $request)
     {
         $data = Game::select(['id', 'name', 'max_time', 'image', 'description'])->orderBy('id', 'desc');
@@ -27,6 +36,8 @@ class GameController extends Controller
                     <a href="' . route('game.delete', $game->id) . '" class="mx-2"><i class="fa-solid fa-trash"></i></a>
                     <span class="border border-right-0 border-light"></span>
                     <a href="' . route('game.edit', $game->id) . '" class="mx-2"><i class="fa-solid fa-edit"></i></a>
+                    <span class="border border-right-0 border-light"></span>
+                    <a href="' . route('game.view', $game->id) . '" class="mx-2"><i class="fa-solid fa-eye"></i></a>
                 </div>';
             })
             ->addColumn('type_name', function (Game $game) {

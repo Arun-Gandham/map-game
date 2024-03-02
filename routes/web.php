@@ -105,6 +105,8 @@ Route::get('/types/datatables', [TypeController::class, 'datatblesList'])->name(
 
 Route::get('/games', [GameController::class, 'List'])->name('game.list');
 
+Route::get('/games/view/{id}', [GameController::class, 'view'])->name('game.view');
+
 Route::get('/games/add', [GameController::class, 'add'])->name('game.add');
 
 Route::post('/games/add/submit', [GameController::class, 'addSubmit'])->name('game.add.submit');
