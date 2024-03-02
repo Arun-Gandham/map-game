@@ -23,10 +23,17 @@
     <script src="{{ asset('assets/vendor/libs/@form-validation/umd/bundle/popular.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js') }}"></script>
+
+
+    <script src="{{ asset('assets/vendor/libs/autosize/autosize.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/cleavejs/cleave.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/cleavejs/cleave-phone.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/bootstrap-maxlength/bootstrap-maxlength.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/jquery-repeater/jquery-repeater.js') }}"></script>
 @endsection
 
 @section('page-script')
-    {{-- <script src="{{ asset('assets/js/tables-datatables-basic.js') }}"></script> --}}
+    <script src="{{ asset('assets/js/forms-extras.js') }}"></script>
 @endsection
 
 @section('content')
@@ -128,8 +135,7 @@
                                     <label for="typeSelect" class="col-sm-3 col-form-label">Question</label>
                                     <div class="col-sm-11">
                                         <input type="text" class="form-control" placeholder="Question"
-                                            name="question" value="{{ isset($point) ? $point->lat & long : '' }}"
-                                            required>
+                                            name="question" value="{{ isset($point) ? $point->question : '' }}" required>
                                     </div>
                                 </div>
 
@@ -138,7 +144,7 @@
                                         Description</label>
                                     <div class="col-sm-11">
                                         <input type="text" class="form-control" placeholder="Question Description"
-                                            name="question_des" value="{{ isset($point) ? $point->lat & long : '' }}"
+                                            name="question_des" value="{{ isset($point) ? $point->question_des : '' }}"
                                             required>
                                     </div>
                                 </div>
@@ -146,43 +152,45 @@
                         </div>
                         <div class="col-md-6">
                             <div class="row">
-                                <div class="col-12">
-                                    <label class="col-sm-3 col-form-label" for="multicol-username">Option</label>
-                                    <div class="col-sm-11">
-                                        <input type="text" class="form-control" placeholder="Option" name="options[]"
-                                            value="{{ isset($point) ? $point->lat & long : '' }}" required>
+                                <div class="form-repeater">
+                                    <div data-repeater-list="options">
+                                        <div data-repeater-item>
+                                            <div class="row">
+                                                <label class="col-md-6 col-sm-3 col-form-label"
+                                                    for="multicol-username">Option</label>
+                                                <div class="col-sm-12 row">
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" placeholder="Option"
+                                                            name="option"
+                                                            value="{{ isset($point) ? $point->lat & long : '' }}"
+                                                            required>
+
+                                                    </div>
+                                                    <div class="mb-3 col-lg-2 col-xl-2 col-12">
+                                                        <button class="btn btn-label-danger" data-repeater-delete>
+                                                            <i class="ti ti-x ti-xs me-1"></i>
+                                                            <span class="align-middle">Delete</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                        </div>
+                                    </div>
+                                    <div class="mb-0">
+                                        <button class="btn btn-primary" type="button" data-repeater-create>
+                                            <i class="ti ti-plus me-1"></i>
+                                            <span class="align-middle">Add</span>
+                                        </button>
                                     </div>
                                 </div>
-
-                                <div class="col-12">
-                                    <label class="col-sm-3 col-form-label" for="multicol-username">Option</label>
-                                    <div class="col-sm-11">
-                                        <input type="text" class="form-control" placeholder="Option" name="options[]"
-                                            value="{{ isset($point) ? $point->lat & long : '' }}" required>
-                                    </div>
-                                </div>
-
-
-                                <div class="col-12">
-                                    <label class="col-sm-3 col-form-label" for="multicol-username">Option</label>
-                                    <div class="col-sm-11">
-                                        <input type="text" class="form-control" placeholder="Option" name="options[]"
-                                            value="{{ isset($point) ? $point->lat & long : '' }}" required>
-                                    </div>
-                                </div>
-
-                                <div class="col-12">
-                                    <label class="col-sm-3 col-form-label" for="multicol-username">Option</label>
-                                    <div class="col-sm-11">
-                                        <input type="text" class="form-control" placeholder="Option" name="options[]"
-                                            value="{{ isset($point) ? $point->lat & long : '' }}" required>
-                                    </div>
-                                </div>
-
 
                             </div>
                         </div>
                 </form>
+
+
+
             </div>
         </div>
     </div>
