@@ -62,6 +62,12 @@
                                 class="fw-medium mx-2 text-heading">Description:</span>
                             <span>{{ $game->description }}</span>
                         </li>
+                        <li class="d-flex align-items-center mb-3"><i class="ti ti-file-description text-heading"></i><span
+                                class="fw-medium mx-2 text-heading">Images:</span>
+                            @foreach (unserialize($game->image) as $image)
+                                <img src="{{ asset($image) }}">
+                            @endforeach
+                        </li>
                     </ul>
                     <div class="pt-1">
                         <div class="row justify-content-start">
