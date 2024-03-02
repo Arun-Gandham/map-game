@@ -50,44 +50,44 @@
         <!-- Form Separator -->
         <div class="col">
             <div class="card mb-4">
-            <form method="POST" action="{{ isset($game) ? route('game.edit.submit') : route('game.add.submit') }}" 
-            enctype="multipart/form-data">
+                <form method="POST" class="mb-5"
+                    action="{{ isset($game) ? route('game.edit.submit') : route('game.add.submit') }}"
+                    enctype="multipart/form-data">
                     @csrf
-                    <div class="row mb-3">
+                    <div class="row mb-3 p-4">
                         <div class="col-md-6">
-                            <div class="row">
-                                <div class="col-12">
-                                    <label class="col-sm-3 col-form-label" for="multicol-username">Name</label>
-                                    <div class="col-sm-11">
-                                        <input type="text" class="form-control" placeholder="Name" name="name"
-                                            value="{{ isset($game) ? $game->name : '' }}" required>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                <label class="col-sm-3 col-form-label" for="multicol-username">Max Time (in seconds)</label>
+                            <div class="col-12">
+                                <label class="col-sm-3 col-form-label" for="multicol-username">Name</label>
                                 <div class="col-sm-11">
-                                <input type="number" class="form-control" placeholder="Max Time (in seconds)" name="max_time" value="{{ isset($game) ? $game->max_time : '' }}" required>
+                                    <input type="text" class="form-control" placeholder="Name" name="name"
+                                        value="{{ isset($game) ? $game->name : '' }}" required>
                                 </div>
+                            </div>
+                            <div class="col-12">
+                                <label class="col-sm-6 col-form-label" for="multicol-username">Max Time (in seconds)</label>
+                                <div class="col-sm-11">
+                                    <input type="number" class="form-control" placeholder="Max Time (in seconds)"
+                                        name="max_time" value="{{ isset($game) ? $game->max_time : '' }}" required>
                                 </div>
+                            </div>
 
                             <div class="col-12">
-                          <label class="col-sm-3 col-form-label" for="multicol-username">Browse Image</label>
-                         <div class="col-sm-11">
-                        <input type="file" class="form-control" name="image" accept="image/*">
-                    </div>
-                   </div>
-
-                    
+                                <label class="col-sm-3 col-form-label" for="multicol-username">Browse Image</label>
+                                <div class="col-sm-11">
+                                    <input type="file" class="form-control" name="image" accept="image/*">
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-md-6">
                             <div>
                                 <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-                                <textarea class="form-control" rows="6" name="description" required>{{ isset($game) ? $game->description : '' }}</textarea>
+                                <textarea class="form-control" rows="8" name="description" required>{{ isset($game) ? $game->description : '' }}</textarea>
                             </div>
                         </div>
 
-                        <div class="pt-4">
-                            <div class="row justify-content-start">
-                                <div class="col-sm-9">
+                        <div class="pt-4 col-md-12 ">
+                            <div class="d-flex justify-content-end">
+                                <div class="">
                                     <input type="hidden" name="id" value="{{ isset($game) ? $game->id : '' }}">
                                     <button type="submit"
                                         class="btn btn-primary me-sm-2 me-1 waves-effect waves-light">{{ isset($game) ? 'Update' : 'Submit' }}</button>
@@ -100,5 +100,50 @@
             </div>
         </div>
     </div>
+    <!-- DataTable with Buttons -->
+    <div class="card">
 
+        <div class="card-datatable table-responsive pt-0">
+            <div class="m-3 d-flex justify-content-between">
+                <h3>Points</h3>
+                <button type="submit" class="btn btn-primary me-sm-2 me-1 waves-effect waves-light">Add</button>
+            </div>
+
+            <table id="data-table" class="datatables-basic table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Type</th>
+                        <th>Distance</th>
+                        <th>Points</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <!--/ DataTable with Buttons -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#data-table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '{{ route('game.list.datatbles') }}',
+                columns: [{
+                        data: 'name'
+                    },
+                    {
+                        data: 'max_time'
+                    },
+                    {
+                        data: 'scores'
+                    },
+                    {
+                        data: 'link'
+                    }
+                ]
+            });
+        });
+    </script>
 @endsection

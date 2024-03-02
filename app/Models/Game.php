@@ -10,8 +10,8 @@ class Game extends Model
     use HasFactory;
     protected $fillable = [
         'name',
-        'max_time_seconds',
+        'max_time',
         'image',
-        'description'
+        'description',
     ];
 }
