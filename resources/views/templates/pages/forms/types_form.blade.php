@@ -59,7 +59,8 @@
                                 </div>
                                 <div class="col-12">
                                     <label for="defaultSelect" class="col-sm-3 col-form-label">Select Color</label>
-                                    <input class="form-control" name="predefined_color" type="color" value="#666EE8" />
+                                    <input class="form-control" name="color" type="color"
+                                        value="{{ isset($type) ? $type->color : '#666EE8' }}" />
                                 </div>
                             </div>
 
