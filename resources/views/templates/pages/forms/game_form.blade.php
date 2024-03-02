@@ -75,7 +75,7 @@
                             <div class="col-12">
                                 <label class="col-sm-3 col-form-label" for="multicol-username">Browse Image</label>
                                 <div class="col-sm-11">
-                                    <input type="file" class="form-control" name="image" accept="image/*">
+                                    <input type="file" class="form-control" name="images[]" multiple accept="image/*">
                                 </div>
                             </div>
                         </div>
