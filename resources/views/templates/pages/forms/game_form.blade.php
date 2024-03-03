@@ -120,6 +120,7 @@
                             <th>Type</th>
                             <th>Distance</th>
                             <th>Points</th>
+                           
                         </tr>
                     </thead>
                 </table>
@@ -146,6 +147,7 @@
                         {
                             data: 'points'
                         }
+                       
                     ]
                 });
             });

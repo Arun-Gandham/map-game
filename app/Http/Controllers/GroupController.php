@@ -15,9 +15,9 @@ class GroupController extends Controller
 
     public function add()
     {
-        return Point::where('game_id', '2')->orderBy('id', 'desc')->get();
-
-        return view('templates.pages.forms.group_form');
+       
+        $points = Point::where('game_id', '2')->orderBy('id', 'desc')->get(); // Fetch points for game_id 2
+        return view('templates.pages.forms.group_form', compact('points'));
     }
 
     public function datatblesList(Request $request)

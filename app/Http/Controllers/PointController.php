@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\Point;
 use App\Models\Type;
 use Illuminate\Http\Request;
@@ -29,10 +30,7 @@ class PointController extends Controller
         // ]);
 
         // Handle the file upload
-        if ($req->hasFile('image')) {
-            // Store the uploaded file and get its path
-            $imagePath = $req->file('image')->store('images', 'public');
-        }
+        
 
         // Create new game record with validated data
         $point = new Point();
@@ -42,7 +40,7 @@ class PointController extends Controller
         $point->title = $req->title;
 
         $point->distance = $req->distance;
-        $point->image = $imagePath ?? null; // Save the file path to the image field in your database
+        $point->image = null; // Save the file path to the image field in your database
         $point->description = $req->description;
         $point->question = $req->question;
         $point->question_des = $req->question_des;
@@ -53,7 +51,16 @@ class PointController extends Controller
         }
         
         $point->options = serialize($options);
-        $point->save();
+        if($point->save())
+        {
+            if ($req->hasFile('image')) {
+                $file = $req->file('image');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path("uploads/points/{$point->id}"), $filename);
+                $point->image = "uploads/points/{$point->id}/".$filename;
+            }
+            $point->save();
+        }
 
         // Redirect back with success message
         return redirect()->route('game.edit', $req->game_id)->with('success', 'Successfully created');

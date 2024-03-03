@@ -57,7 +57,7 @@
         <!-- Form Separator -->
         <div class="col">
             <div class="card mb-4">
-                <form class="card-body" method="POST" action="{{ route('point.add.submit') }}">
+                <form class="card-body" method="POST" action="{{ route('point.add.submit') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="row mb-3">
                         <div class="col-md-6">
