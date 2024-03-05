@@ -44,7 +44,7 @@ class GameController extends Controller
                 return $game->type;
             })
             ->addColumn('link', function (Game $game) {
-                return '<a href="" class="mx-2">Frontend Link</a>';
+                return '<a href="' . route("show.game.view", $game->id) . '" class="mx-2">Frontend Link</a>';
             })
             ->addColumn('scores', function (Game $game) {
                 return '<a href="" class="mx-2">Scores</a>';
@@ -84,7 +84,6 @@ class GameController extends Controller
         $game->max_time = $req->max_time;
         // Handle image upload if required
         $game->description = $req->description;
-    
 
         if ($game->save()) {
 

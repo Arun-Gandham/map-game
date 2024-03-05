@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FrontPageController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\MapController;
@@ -159,3 +160,7 @@ Route::get('/scores', [ScoresController::class, 'List'])->name('score.list');
 Route::get('/scores/datatables', [ScoresController::class, 'datatblesList'])->name('score.list.datatbles');
 
 Route::get('/map-view', [MapController::class, 'MapView'])->name('map.view');
+
+Route::get('/show/game/{id}', [FrontPageController::class, 'showGameView'])->name('show.game.view');
+
+Route::post('/show/game/{id}/submit', [FrontPageController::class, 'showGameViewSubmit'])->name('show.game.submit');
