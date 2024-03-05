@@ -7,11 +7,19 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/front-page-landing.css') }}" />
     <script src="{{ asset('assets/vendor/libs/nouislider/nouislider.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/swiper/swiper.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/swiper/swiper.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/ui-carousel.css') }}" />
 @endsection
 
 @section('page-script')
     <script src="{{ asset('assets/js/front-page-landing.js') }}"></script>
     <script src="{{ asset('assets/js/ui-modals.js') }}"></script>
+    <script src="{{ asset('assets/js/ui-carousel.js') }}"></script>
+@endsection
+
+
+@section('vendor-script')
+    <script src="{{ asset('assets/vendor/libs/swiper/swiper.js') }}"></script>
 @endsection
 
 @section('content')
@@ -26,6 +34,34 @@
         <div class="container mt-5">
             <div id="map" style="display: none;"></div>
             <h1>The Hunt</h1>
+            <div class="row">
+                <!-- Bootstrap carousel -->
+                <div class="col-md">
+                    <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+                        {{-- <ol class="carousel-indicators">
+                            <li data-bs-target="#carouselExample" data-bs-slide-to="0" class="active"></li>
+                            <li data-bs-target="#carouselExample" data-bs-slide-to="1"></li>
+                            <li data-bs-target="#carouselExample" data-bs-slide-to="2"></li>
+                        </ol> --}}
+                        <div class="carousel-inner">
+                            @foreach (unserialize($game->image) as $key => $image)
+                                <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
+                                    <img class="d-block w-100 h-50" src="{{ asset($image) }}" alt="First slide" />
+                                </div>
+                            @endforeach
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselExample" role="button" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExample" role="button" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
             <h3>{{ $game->name }}</h3>
             <p>{{ $game->description }}</p>
             <form action="{{ route('show.game.submit', $game->id) }}" method="post">

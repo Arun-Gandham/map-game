@@ -17,6 +17,6 @@ class FrontPageController extends Controller
 
     public function showGameViewSubmit(Request $req, $id)
     {
-        return redirect()->route('map.view');
+        return redirect()->route('map.view', $id);
     }
 }

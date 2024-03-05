@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Point;
+
 class MapController extends Controller
 {
-    public function MapView()
+    public function MapView($id)
     {
         $pageConfigs = ['myLayout' => 'front'];
-        return view('templates.pages.map_view', compact('pageConfigs'));
-
+        $points = Point::where('game_id', $id)->get();
+        return view('templates.pages.map_view', compact('pageConfigs', 'points'));
     }
 }

@@ -109,7 +109,7 @@ class GameController extends Controller
             foreach ($req->file('images') as $file) {
                 $filename = time() . '_' . $count . '_' . $file->getClientOriginalName();
                 $file->move(public_path("uploads/games/{$game->id}"), $filename);
-                $paths[] = "uploads/products/{$game->id}/{$filename}";
+                $paths[] = "uploads/games/{$game->id}/{$filename}";
                 $count++;
             }
             $game->image = serialize($paths);

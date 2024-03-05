@@ -57,7 +57,9 @@
         <!-- Form Separator -->
         <div class="col">
             <div class="card mb-4">
-                <form class="card-body" method="POST" action="{{ route('point.add.submit') }}" enctype="multipart/form-data">
+                <form class="card-body" method="POST"
+                    action="{{ isset($point) ? route('point.edit.submit') : route('point.add.submit') }}"
+                    enctype="multipart/form-data">
                     @csrf
                     <div class="row mb-3">
                         <div class="col-md-6">
@@ -78,14 +80,14 @@
                                     <label class="col-sm-3 col-form-label" for="multicol-username">Title</label>
                                     <div class="col-sm-11">
                                         <input type="text" class="form-control" placeholder="Title" name="title"
-                                            value="{{ isset($point) ? $point->lat & long : '' }}" required>
+                                            value="{{ isset($point) ? $point->title : '' }}" required>
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <label class="col-sm-3 col-form-label" for="multicol-username">Lat & Long</label>
                                     <div class="col-sm-11">
                                         <input type="text" class="form-control" placeholder="Lat&Long" name="latitude"
-                                            value="{{ isset($point) ? $point->lat & long : '' }}" required>
+                                            value="{{ isset($point) ? $point->lat_long : '' }}" required>
                                     </div>
                                 </div>
 
@@ -101,7 +103,8 @@
                                 <div class="col-12">
                                     <label class="col-sm-3 col-form-label" for="multicol-username">Upload Image</label>
                                     <div class="col-sm-11">
-                                        <input type="file" class="form-control" name="image" accept="image/*" required>
+                                        <input type="file" class="form-control" name="image" accept="image/*"
+                                            {{ isset($point) ? '' : 'required' }}>
                                     </div>
                                 </div>
 
@@ -119,8 +122,9 @@
                         <div class="pt-4">
                             <div class="row justify-content-start">
                                 <div class="col-sm-9">
-                                    <input type="hidden" name="id" value="{{ isset($point) ? $game->id : '' }}">
-                                    <input type="hidden" name="game_id" value="{{ isset($id) ? $id : '' }}">
+                                    <input type="hidden" name="id" value="{{ isset($point) ? $point->id : '' }}">
+                                    <input type="hidden" name="game_id"
+                                        value="{{ isset($point) ? $point->game_id : '' }}">
                                     <button type="submit"
                                         class="btn btn-primary me-sm-2 me-1 waves-effect waves-light">{{ isset($point) ? 'Update' : 'Submit' }}</button>
                                     <button class="btn btn-label-secondary waves-effect"><a
@@ -138,7 +142,6 @@
                                             name="question" value="{{ isset($point) ? $point->question : '' }}" required>
                                     </div>
                                 </div>
-
                                 <div class="col-12">
                                     <label class="col-md-6 col-sm-3 col-form-label" for="multicol-username">Question
                                         Description</label>
@@ -154,28 +157,54 @@
                             <div class="row">
                                 <div class="form-repeater">
                                     <div data-repeater-list="options">
-                                        <div data-repeater-item>
-                                            <div class="row">
-                                                <label class="col-md-6 col-sm-3 col-form-label"
-                                                    for="multicol-username">Option</label>
-                                                <div class="col-sm-12 row">
-                                                    <div class="col-sm-9">
-                                                        <input type="text" class="form-control" placeholder="Option"
-                                                            name="option"
-                                                            value="{{ isset($point) ? $point->lat & long : '' }}"
-                                                            required>
+                                        @if (isset($point))
+                                            @foreach (unserialize($point->options) as $option)
+                                                <div data-repeater-item>
+                                                    <div class="row">
+                                                        <label class="col-md-6 col-sm-3 col-form-label"
+                                                            for="multicol-username">Option</label>
+                                                        <div class="col-sm-12 row">
+                                                            <div class="col-sm-9">
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="Option" name="option"
+                                                                    value="{{ isset($option) ? $option : '' }}" required>
 
+                                                            </div>
+                                                            <div class="mb-3 col-lg-2 col-xl-2 col-12">
+                                                                <button class="btn btn-label-danger" type="button"
+                                                                    data-repeater-delete>
+                                                                    <i class="ti ti-x ti-xs me-1"></i>
+                                                                    <span class="align-middle">Delete</span>
+                                                                </button>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="mb-3 col-lg-2 col-xl-2 col-12">
-                                                        <button class="btn btn-label-danger" type="button" data-repeater-delete>
-                                                            <i class="ti ti-x ti-xs me-1"></i>
-                                                            <span class="align-middle">Delete</span>
-                                                        </button>
+                                                </div>
+                                                <hr>
+                                            @endforeach
+                                        @else
+                                            <div data-repeater-item>
+                                                <div class="row">
+                                                    <label class="col-md-6 col-sm-3 col-form-label"
+                                                        for="multicol-username">Option</label>
+                                                    <div class="col-sm-12 row">
+                                                        <div class="col-sm-9">
+                                                            <input type="text" class="form-control"
+                                                                placeholder="Option" name="option" required>
+
+                                                        </div>
+                                                        <div class="mb-3 col-lg-2 col-xl-2 col-12">
+                                                            <button class="btn btn-label-danger" type="button"
+                                                                data-repeater-delete>
+                                                                <i class="ti ti-x ti-xs me-1"></i>
+                                                                <span class="align-middle">Delete</span>
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <hr>
-                                        </div>
+                                        @endif
                                     </div>
                                     <div class="mb-0">
                                         <button class="btn btn-primary" type="button" data-repeater-create>
@@ -188,11 +217,8 @@
                             </div>
                         </div>
                 </form>
-
-
-
             </div>
         </div>
     </div>
 
-@endsection+
+@endsection

@@ -159,7 +159,7 @@ Route::get('/scores', [ScoresController::class, 'List'])->name('score.list');
 
 Route::get('/scores/datatables', [ScoresController::class, 'datatblesList'])->name('score.list.datatbles');
 
-Route::get('/map-view', [MapController::class, 'MapView'])->name('map.view');
+Route::get('/map/{id}', [MapController::class, 'MapView'])->name('map.view');
 
 Route::get('/show/game/{id}', [FrontPageController::class, 'showGameView'])->name('show.game.view');
 
