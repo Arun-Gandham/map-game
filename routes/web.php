@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\MapController;
 use App\Http\Controllers\PointController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScoresController;
@@ -156,3 +157,5 @@ Route::get('/viewgames/datatables', [GameController::class, 'datatblesList'])->n
 Route::get('/scores', [ScoresController::class, 'List'])->name('score.list');
 
 Route::get('/scores/datatables', [ScoresController::class, 'datatblesList'])->name('score.list.datatbles');
+
+Route::get('/map-view', [MapController::class, 'MapView'])->name('map.view');
