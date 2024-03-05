@@ -2,6 +2,14 @@
 
 @section('title', 'DataTables - Tables')
 
+@section('vendor-style')
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/animate-css/animate.css') }}">
+@endsection
+
+@section('page-script')
+    <script src="{{ asset('assets/js/ui-modals.js') }}"></script>
+@endsection
+
 @section('content')
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
@@ -11,8 +19,27 @@
         }
     </style>
     <div class="container mt-5">
-        <button onclick="initMap()">Refresh</button>
         <div id="map"></div>
+        <button onclick="refreshLocation()">Refresh</button>
+
+    </div>
+    <!-- Modal 2-->
+    <div class="modal fade" id="modalToggle2" aria-hidden="true" aria-labelledby="modalToggleLabel2" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalToggleLabel2">Modal 2</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Hide this modal and show the first with the button below.
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-bs-target="#modalToggle" data-bs-toggle="modal"
+                        data-bs-dismiss="modal">Back to first</button>
+                </div>
+            </div>
+        </div>
     </div>
     @php
         $locations = [
@@ -27,6 +54,15 @@
     <script type="text/javascript">
         var map;
         var userMarker;
+
+        function refreshLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition(function(position) {
+                    var userLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                    updateMapWithUserLocation(userLatLng);
+                });
+            }
+        }
 
         function initMap() {
 
@@ -51,9 +87,15 @@
             // Update user's current location and map center every time it changes
             if (navigator.geolocation) {
                 navigator.geolocation.watchPosition(function(position) {
-                    var userLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                    var userLatLng = new google.maps.LatLng(position.coords.latitude, position.coords
+                        .longitude);
+                    if (!map.getCenter()) {
+                        // Center the map on the user's location if it's not already centered
+                        map.setCenter(userLatLng);
+                        map.setZoom(10); // You can adjust the zoom level as needed
+                    }
                     updateMapWithUserLocation(userLatLng);
-
+                    infowindow = new google.maps.InfoWindow();
                     var locations = {{ Js::from($locations) }};
                     //------------------------
                     for (i = 0; i < locations.length; i++) {
@@ -73,6 +115,11 @@
                                 fillOpacity: 1,
                                 strokeWeight: 2
                             }
+                        });
+
+                        marker.addListener('click', function() {
+                            // Open the modal when marker is clicked
+                            $('#modalToggle2').modal('show');
                         });
 
                         google.maps.event.addListener(marker, 'click', (function(marker, i) {
