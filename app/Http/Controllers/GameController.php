@@ -82,9 +82,9 @@ class GameController extends Controller
 
         $game->name = $req->name;
         $game->max_time = $req->max_time;
-        $game->no_of_scores = $req->no_of_scores;
         // Handle image upload if required
         $game->description = $req->description;
+    
 
         if ($game->save()) {
 

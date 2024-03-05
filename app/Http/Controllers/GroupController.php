@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Group;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use App\Models\Point;
 
 class GroupController extends Controller
 {
@@ -15,9 +16,8 @@ class GroupController extends Controller
 
     public function add()
     {
-       
-        $points = Point::where('game_id', '2')->orderBy('id', 'desc')->get(); // Fetch points for game_id 2
-        return view('templates.pages.forms.group_form', compact('points'));
+        return view('templates.pages.forms.group_form');
+        
     }
 
     public function datatblesList(Request $request)
