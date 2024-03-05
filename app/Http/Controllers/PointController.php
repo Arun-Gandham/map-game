@@ -80,6 +80,28 @@ class PointController extends Controller
             ->rawColumns(['actions'])
             ->make(true);
 
+
     }
+    public function delete($id)
+    {
+        $user = Point::where('id', $id)->delete();
+        if ($user) {
+            return redirect()->back()->with('success', 'Game deleted succesfully');
+        }
+
+        return redirect()->back()->with('error', 'Something went wrong');
+    }
+
+    public function edit($id)
+    {
+        $game = Point::where('id', $id)->first();
+        if (!$game) {
+            return redirect()->back()->with('error', 'User not exist!!!');
+        }
+        return view('templates.pages.forms.game_list', compact('game'));
+    }
+
+   
+    
 
 }
