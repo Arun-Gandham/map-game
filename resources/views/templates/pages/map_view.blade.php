@@ -55,6 +55,119 @@
         }
     @endphp
     <script type="text/javascript">
+        const createMap = ({
+            lat,
+            lng
+        }) => {
+            return new google.maps.Map(document.getElementById('map'), {
+                center: {
+                    lat,
+                    lng
+                },
+                zoom: 15
+            });
+        };
+
+        const createMarker = ({
+            map,
+            position
+        }) => {
+            return new google.maps.Marker({
+                map,
+                position
+            });
+        };
+
+        const getCurrentPosition = ({
+            onSuccess,
+            onError = () => {}
+        }) => {
+            if ('geolocation' in navigator === false) {
+                return onError(new Error('Geolocation is not supported by your browser.'));
+            }
+
+            return navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        };
+
+        // New function to track user's location.
+        const trackLocation = ({
+            onSuccess,
+            onError = () => {}
+        }) => {
+            if ('geolocation' in navigator === false) {
+                return onError(new Error('Geolocation is not supported by your browser.'));
+            }
+
+            // Use watchPosition instead.
+            return navigator.geolocation.watchPosition(onSuccess, onError);
+        };
+
+        const getPositionErrorMessage = code => {
+            switch (code) {
+                case 1:
+                    return 'Permission denied.';
+                case 2:
+                    return 'Position unavailable.';
+                case 3:
+                    return 'Timeout reached.';
+                default:
+                    return null;
+            }
+        }
+
+        function initMap() {
+            const initialPosition = {
+                lat: 59.325,
+                lng: 18.069
+            };
+            const map = createMap(initialPosition);
+            const marker = createMarker({
+                map,
+                position: initialPosition
+            });
+
+            trackLocation({
+                onSuccess: ({
+                    coords: {
+                        latitude: lat,
+                        longitude: lng
+                    }
+                }) => {
+                    console.log(lat, lng);
+                    marker.setPosition({
+                        lat,
+                        lng
+                    });
+                    map.panTo({
+                        lat,
+                        lng
+                    });
+                },
+                onError: err =>
+                    alert(`Error: ${getPositionErrorMessage(err.code) || err.message}`)
+            });
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         var map;
         var userMarker;
 
@@ -136,140 +249,33 @@
         //     }
         // }
 
-
-
         // Load the map asynchronously
         function loadMapScript() {
             var script = document.createElement("script");
-            script.src = "https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAP_KEY') }}&callback=initMap";
+            script.src =
+                "https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAP_KEY') }}&callback=initMap";
             script.async = true;
             document.body.appendChild(script);
         }
 
 
-        // // Call the function to load the map
+        // Call the function to load the map
         loadMapScript();
 
 
-        // function updateMapWithUserLocation(userLatLng) {
-        //     if (!userMarker) {
-        //         userMarker = new google.maps.Marker({
-        //             position: userLatLng,
-        //             map: map,
-        //             icon: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-        //             title: 'Your Location'
-        //         });
-        //     } else {
-        //         userMarker.setPosition(userLatLng);
-        //     }
-        //     map.setCenter(userLatLng);
-        //     console.log("User's location updated:", userLatLng.lat(), userLatLng.lng());
-        // }
-
-
-        // Initial Init
-
-        function initMap() {
-            map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 10,
-                icon: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-                title: 'Your Location',
-                styles: [{
-                        featureType: "poi",
-                        elementType: "labels",
-                        stylers: [{
-                            visibility: "off"
-                        }] // Hide POI labels
-                    },
-                    {
-                        featureType: "poi",
-                        stylers: [{
-                            visibility: "off"
-                        }] // Hide all POIs
-                    }
-                ]
-            });
-            updateUserCurrentLocation();
-            makeMakers();
-        }
-
-        setInterval(() => {
-            updateUserCurrentLocation();
-        }, 10000);
-
-        function updateUserCurrentLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.watchPosition(function(position) {
-                    var userLatLng = new google.maps.LatLng(position.coords.latitude, position.coords
-                        .longitude);
-                    console.log("Your current location", position.coords.latitude, position.coords.longitude);
-                    currentMaker = new google.maps.Marker({
-                        position: userLatLng,
-                        map: map,
-                        icon: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-                        title: 'Your Location'
-                    });
-                    currentMaker.setPosition(userLatLng)
-                    map.setCenter(userLatLng);
-                    // map.setZoom(10);
-                }, function(error) {
-                    console.log("Error getting user's location: " + error.message);
-                }, {
-                    enableHighAccuracy: true
-                });
-            }
-        }
-
-        // var currentMaker;
-
-        // function updateUserCurrentLocation() {
-        //     if (navigator.geolocation) {
-        //         navigator.geolocation.watchPosition(function(position) {
-        //             // var userLatLng = new google.maps.LatLng(position.coords.latitude, position.coords
-        //             //     .longitude);
-        //             // console.log("Your current location", position.coords.latitude, position.coords.longitude);
-        //             // currentMaker = new google.maps.Marker({
-        //             //     position: userLatLng,
-        //             //     map: map,
-        //             //     icon: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-        //             //     title: 'Your Location'
-        //             // });
-        //             // currentMaker.setPosition(userLatLng)
-        //             // map.setCenter(userLatLng);
-        //             // map.setZoom(10);
-        //         }, function(error) {
-        //             console.log("Error getting user's location: " + error.message);
-        //         }, {
-        //             enableHighAccuracy: true,
-        //             maximumAge: 0,
-        //             timeout: 5000
-        //         });
-        //     }
-        // }
-
-        function makeMakers() {
-            infowindow = new google.maps.InfoWindow();
-            var locations = {{ Js::from($locations) }};
-            //------------------------
-            for (i = 0; i < locations.length; i++) {
-
-                marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+        function updateMapWithUserLocation(userLatLng) {
+            if (!userMarker) {
+                userMarker = new google.maps.Marker({
+                    position: userLatLng,
                     map: map,
-                    icon: {
-                        path: google.maps.SymbolPath.CIRCLE,
-                        scale: 10,
-                        fillColor: locations[i][3], // CSS color for each location
-                        fillOpacity: 1,
-                        strokeWeight: 2
-                    }
+                    icon: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+                    title: 'Your Location'
                 });
-
-                marker.addListener('click', function() {
-                    // Open the modal when marker is clicked
-                    $('#modalToggle2').modal('show');
-                });
+            } else {
+                userMarker.setPosition(userLatLng);
             }
+            map.setCenter(userLatLng);
+            console.log("User's location updated:", userLatLng.lat(), userLatLng.lng());
         }
 
 
