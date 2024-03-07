@@ -19,9 +19,8 @@
         }
     </style>
     <div class="container mt-5 ">
-        <button onclick="updateLocation()" class="mt-5">Update Location</button>
+        <button id="updateButton" onclick="updateLocation()" style="display: none;" class="mt-5">Update Location</button>
         <div id="map" style="height: 400px;"></div>
-        <div id="map"></div>
 
     </div>
     <!-- Modal 2-->
@@ -33,7 +32,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Hide this modal and show the first with the button below.
+                    <img src="" id="modalImage">
+                    <p><span id="modaldis"></span> to reach the point</p>
+                    <p id="modaldesc"></p>
+                    <p id="modalque"></p>
+                    <p id="modaloptions"></p>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" data-bs-target="#modalToggle" data-bs-toggle="modal"
@@ -53,95 +56,47 @@
                 $point->distance,
                 $point->image,
                 $point->description,
+                $point->question,
+                $point->question_des,
             ];
         }
     @endphp
     <script type="text/javascript">
-        // // Initialize the map with the user's initial location
-        // function initMap() {
-        //     // Set up map options
-        //     var mapOptions = {
-        //         zoom: 15,
-        //         mapTypeId: google.maps.MapTypeId.ROADMAP
-        //     };
+        // Function to populate modal with data 
+        function populateModal(title, image, desc, que, options, dis) {
+            document.getElementById('modalImage').src = image;
+            document.getElementById('modaldesc').innerHTML = desc;
+            document.getElementById('modalque').innerHTML = que;
+            document.getElementById('modaloptions').innerHTML = options;
+            document.getElementById('modaldis').innerHTML = dis;
 
-        //     // Create the map
-        //     var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+            $('#modalToggle2').modal('show');
+        }
 
-        //     // Initialize the Geolocation API
-        //     if (navigator.geolocation) {
-        //         // Get the user's initial location
-        //         navigator.geolocation.getCurrentPosition(function(position) {
-        //             var initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords
-        //                 .longitude);
+        function calculateDistance(coord1, coord2) {
+            // Convert latitude and longitude to Google Maps LatLng objects
+            var latLng1 = new google.maps.LatLng(coord1.lat, coord1.lng);
+            var latLng2 = new google.maps.LatLng(coord2.lat, coord2.lng);
 
-        //             // Set the map center to the user's initial location
-        //             map.setCenter(initialLocation);
+            // Calculate the distance between the two coordinates
+            var distance = google.maps.geometry.spherical.computeDistanceBetween(latLng1, latLng2);
 
-        //             // Create a marker for the user's initial location
-        //             var marker = new google.maps.Marker({
-        //                 position: initialLocation,
-        //                 map: map,
-        //                 title: 'Your Location'
-        //             });
+            return Math.floor(distance); // Distance in meters
+        }
 
-        //             // Update the user's location as they move
-        //             navigator.geolocation.watchPosition(function(position) {
-        //                 var newLocation = new google.maps.LatLng(position.coords.latitude, position.coords
-        //                     .longitude);
-
-        //                 // Update the marker position
-        //                 marker.setPosition(newLocation);
-
-        //                 // Center the map on the new location
-        //                 map.setCenter(newLocation);
-        //             });
-        //         }, function() {
-        //             handleLocationError(true, map.getCenter());
-        //         });
-        //     } else {
-        //         // Browser doesn't support Geolocation
-        //         handleLocationError(false, map.getCenter());
-        //     }
-        // }
-
-        // // Handle errors in geolocation
-        // function handleLocationError(browserHasGeolocation, pos) {
-        //     var infoWindow = new google.maps.InfoWindow({
-        //         map: map
-        //     });
-        //     infoWindow.setPosition(pos);
-        //     infoWindow.setContent(browserHasGeolocation ?
-        //         'Error: The Geolocation service failed.' :
-        //         'Error: Your browser doesn\'t support geolocation.');
-        // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        var map, marker; // Declare map variable globally
+        var map, marker, circle, currentLat, currentLng; // Declare map variable globally
 
         // Initialize the map with the user's initial location
         function initMap() {
             var mapOptions = {
-                zoom: 15,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
+                zoom: 14,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                styles: [{
+                    featureType: "poi",
+                    stylers: [{
+                        visibility: "off"
+                    }] // Hide all POIs
+                }]
             };
 
             // Create the map
@@ -149,33 +104,96 @@
 
             // Display initial location
             displayCurrentLocation();
+            infowindow = new google.maps.InfoWindow();
+            var locations = {{ Js::from($locations) }};
+            var usermarker;
+            //------------------------
+            for (i = 0; i < locations.length; i++) {
+
+                usermarker = new google.maps.Marker({
+                    position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                    map: map,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 10,
+                        fillColor: locations[i][3], // CSS color for each location
+                        fillOpacity: 1,
+                        strokeWeight: 2
+                    }
+                });
+
+                attachMarkerClickEvent(usermarker, locations[i]);
+
+
+            }
+            // Simulate click on the hidden button every 5 seconds
+            setInterval(function() {
+                document.getElementById('updateButton').click();
+            }, 5000);
+        }
+
+        function attachMarkerClickEvent(usermarker, location) {
+            usermarker.addListener('click', function() {
+                var dis = calculateDistance({
+                    lat: location[2],
+                    lng: location[2]
+                }, {
+                    lat: currentLat,
+                    lng: currentLng
+                });
+                populateModal(location[0], location[5], location[6], location[7], location[8], dis);
+            });
         }
 
         // Display current location on the map
         function displayCurrentLocation() {
             if (navigator.geolocation) {
+                var options = {
+                    enableHighAccuracy: true
+                };
+
                 // Get the user's current location
                 navigator.geolocation.getCurrentPosition(function(position) {
                     var currentLocation = new google.maps.LatLng(position.coords.latitude, position.coords
                         .longitude);
-                    console.log(currentLocation);
-                    // Set the map center to the user's location
-                    map.setCenter(currentLocation);
-
+                    currentLat = position.coords.latitude
+                    currentLng = position.coords.longitude
                     // Create a marker for the user's location if not already created
                     if (!marker) {
                         marker = new google.maps.Marker({
                             position: currentLocation,
                             map: map,
+                            icon: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+                            scaledSize: new google.maps.Size(50, 50),
                             title: 'Your Location'
                         });
+                        map.setCenter(currentLocation);
                     } else {
                         // Reposition the existing marker to the new location
                         marker.setPosition(currentLocation);
+
                     }
+
+
+                    // Draw a circle around the user's location
+                    // if (!circle) {
+                    //     circle = new google.maps.Circle({
+                    //         strokeColor: '#00BFFF',
+                    //         strokeOpacity: 0.8,
+                    //         strokeWeight: 2,
+                    //         fillColor: '#00BFFF',
+                    //         fillOpacity: 0.35,
+                    //         map: map,
+                    //         center: currentLocation,
+                    //         radius: 100 // Specify the radius in meters
+                    //     });
+                    // } else {
+                    //     // Update the circle position to the new location
+                    //     circle.setCenter(currentLocation);
+                    // }
                 }, function() {
                     handleLocationError(true, map.getCenter());
-                });
+                }, options);
             } else {
                 // Browser doesn't support Geolocation
                 handleLocationError(false, map.getCenter());
@@ -205,7 +223,8 @@
         // Load the Google Maps API asynchronously
         function loadScript() {
             var script = document.createElement('script');
-            script.src = "https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAP_KEY') }}&callback=initMap";
+            script.src =
+                "https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAP_KEY') }}&libraries=geometry&callback=initMap";
             script.defer = true;
             script.async = true;
             document.body.appendChild(script);
