@@ -102,6 +102,26 @@
             return navigator.geolocation.watchPosition(onSuccess, onError);
         };
 
+        function getCurrentLocationCords() {
+            if ('geolocation' in navigator === false) {
+                return onError(new Error('Geolocation is not supported by your browser.'));
+            }
+            var lat, lng;
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition(function(position) {
+                    lat = position.coords.latitude;
+                    lng = osition.coords.longitude;
+                })
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+            var details = {
+                lat,
+                lng
+            }
+            return details;
+        }
+
         const getPositionErrorMessage = code => {
             switch (code) {
                 case 1:
@@ -116,10 +136,7 @@
         }
 
         function initMap() {
-            const initialPosition = {
-                lat: 59.325,
-                lng: 18.069
-            };
+            const initialPosition = getCurrentLocationCords();
             const map = createMap(initialPosition);
             const marker = createMarker({
                 map,
