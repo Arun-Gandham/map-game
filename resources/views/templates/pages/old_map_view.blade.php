@@ -18,9 +18,7 @@
             height: 400px;
         }
     </style>
-    <div class="container mt-5 ">
-        <button onclick="updateLocation()" class="mt-5">Update Location</button>
-        <div id="map" style="height: 400px;"></div>
+    <div class="container mt-5">
         <div id="map"></div>
 
     </div>
@@ -135,68 +133,15 @@
 
 
 
-        var map, marker; // Declare map variable globally
 
-        // Initialize the map with the user's initial location
-        function initMap() {
-            var mapOptions = {
-                zoom: 15,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
 
-            // Create the map
-            map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-            // Display initial location
-            displayCurrentLocation();
-        }
 
-        // Display current location on the map
-        function displayCurrentLocation() {
-            if (navigator.geolocation) {
-                // Get the user's current location
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    var currentLocation = new google.maps.LatLng(position.coords.latitude, position.coords
-                        .longitude);
-                    console.log(currentLocation);
-                    // Set the map center to the user's location
-                    map.setCenter(currentLocation);
 
-                    // Create a marker for the user's location if not already created
-                    if (!marker) {
-                        marker = new google.maps.Marker({
-                            position: currentLocation,
-                            map: map,
-                            title: 'Your Location'
-                        });
-                    } else {
-                        // Reposition the existing marker to the new location
-                        marker.setPosition(currentLocation);
-                    }
-                }, function() {
-                    handleLocationError(true, map.getCenter());
-                });
-            } else {
-                // Browser doesn't support Geolocation
-                handleLocationError(false, map.getCenter());
-            }
-        }
 
-        // Handle errors in geolocation
-        function handleLocationError(browserHasGeolocation, pos) {
-            var infoWindow = new google.maps.InfoWindow({
-                map: map
-            });
-            infoWindow.setPosition(pos);
-            infoWindow.setContent(browserHasGeolocation ?
-                'Error: The Geolocation service failed.' :
-                'Error: Your browser doesn\'t support geolocation.');
-        }
 
-        // Update location on button click
-        function updateLocation() {
-            displayCurrentLocation();
-        }
+
+
 
 
 
@@ -213,16 +158,6 @@
 
         // Call the loadScript function to load the Google Maps API
         window.onload = loadScript;
-
-
-
-
-
-
-
-
-
-
 
 
 
