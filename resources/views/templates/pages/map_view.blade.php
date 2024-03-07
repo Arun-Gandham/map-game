@@ -55,116 +55,267 @@
         }
     @endphp
     <script type="text/javascript">
-        const createMap = ({
-            lat,
-            lng
-        }) => {
-            return new google.maps.Map(document.getElementById('map'), {
-                center: {
-                    lat,
-                    lng
-                },
-                zoom: 15
-            });
-        };
-
-        const createMarker = ({
-            map,
-            position
-        }) => {
-            return new google.maps.Marker({
-                map,
-                position
-            });
-        };
-
-        const getCurrentPosition = ({
-            onSuccess,
-            onError = () => {}
-        }) => {
-            if ('geolocation' in navigator === false) {
-                return onError(new Error('Geolocation is not supported by your browser.'));
-            }
-
-            return navigator.geolocation.getCurrentPosition(onSuccess, onError);
-        };
-
-        // New function to track user's location.
-        const trackLocation = ({
-            onSuccess,
-            onError = () => {}
-        }) => {
-            if ('geolocation' in navigator === false) {
-                return onError(new Error('Geolocation is not supported by your browser.'));
-            }
-
-            // Use watchPosition instead.
-            return navigator.geolocation.watchPosition(onSuccess, onError);
-        };
-
-        function getCurrentLocationCords() {
-            if ('geolocation' in navigator === false) {
-                return onError(new Error('Geolocation is not supported by your browser.'));
-            }
-            var lat, lng;
-            if (navigator.geolocation) {
-                navigator.geolocation.watchPosition(function(position) {
-                    lat = position.coords.latitude;
-                    lng = osition.coords.longitude;
-                })
-            } else {
-                alert("Geolocation is not supported by this browser.");
-            }
-            var details = {
-                lat,
-                lng
-            }
-            return details;
-        }
-
-        const getPositionErrorMessage = code => {
-            switch (code) {
-                case 1:
-                    return 'Permission denied.';
-                case 2:
-                    return 'Position unavailable.';
-                case 3:
-                    return 'Timeout reached.';
-                default:
-                    return null;
-            }
-        }
-
+        // Initialize the map with the user's initial location
         function initMap() {
-            const initialPosition = getCurrentLocationCords();
-            const map = createMap(initialPosition);
-            const marker = createMarker({
-                map,
-                position: initialPosition
-            });
+            // Set up map options
+            var mapOptions = {
+                zoom: 15,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
 
-            trackLocation({
-                onSuccess: ({
-                    coords: {
-                        latitude: lat,
-                        longitude: lng
-                    }
-                }) => {
-                    console.log(lat, lng);
-                    marker.setPosition({
-                        lat,
-                        lng
+            // Create the map
+            var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+            // Initialize the Geolocation API
+            if (navigator.geolocation) {
+                // Get the user's initial location
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var initialLocation = new google.maps.LatLng(position.coords.latitude, position.coords
+                        .longitude);
+
+                    // Set the map center to the user's initial location
+                    map.setCenter(initialLocation);
+
+                    // Create a marker for the user's initial location
+                    var marker = new google.maps.Marker({
+                        position: initialLocation,
+                        map: map,
+                        title: 'Your Location'
                     });
-                    map.panTo({
-                        lat,
-                        lng
+
+                    // Update the user's location as they move
+                    navigator.geolocation.watchPosition(function(position) {
+                        var newLocation = new google.maps.LatLng(position.coords.latitude, position.coords
+                            .longitude);
+
+                        // Update the marker position
+                        marker.setPosition(newLocation);
+
+                        // Center the map on the new location
+                        map.setCenter(newLocation);
                     });
-                },
-                onError: err =>
-                    alert(`Error: ${getPositionErrorMessage(err.code) || err.message}`)
-            });
+                }, function() {
+                    handleLocationError(true, map.getCenter());
+                });
+            } else {
+                // Browser doesn't support Geolocation
+                handleLocationError(false, map.getCenter());
+            }
         }
 
+        // Handle errors in geolocation
+        function handleLocationError(browserHasGeolocation, pos) {
+            var infoWindow = new google.maps.InfoWindow({
+                map: map
+            });
+            infoWindow.setPosition(pos);
+            infoWindow.setContent(browserHasGeolocation ?
+                'Error: The Geolocation service failed.' :
+                'Error: Your browser doesn\'t support geolocation.');
+        }
+
+        // Load the Google Maps API asynchronously
+        function loadScript() {
+            var script = document.createElement('script');
+            script.src = "https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAP_KEY') }}&callback=initMap";
+            script.defer = true;
+            script.async = true;
+            document.body.appendChild(script);
+        }
+
+        // Call the loadScript function to load the Google Maps API
+        window.onload = loadScript;
+
+
+        // const createMap = () => {
+        //     return new google.maps.Map(document.getElementById('map'), {
+        //         zoom: 15
+        //     });
+        // };
+
+        // const createMarker = ({
+        //     map,
+        //     position
+        // }) => {
+        //     return new google.maps.Marker({
+        //         map,
+        //         position
+        //     });
+        // };
+
+        // const getCurrentPosition = ({
+        //     onSuccess,
+        //     onError = () => {}
+        // }) => {
+        //     if ('geolocation' in navigator === false) {
+        //         return onError(new Error('Geolocation is not supported by your browser.'));
+        //     }
+
+        //     return navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        // };
+
+        // // New function to track user's location.
+        // const trackLocation = ({
+        //     onSuccess,
+        //     onError = () => {}
+        // }) => {
+        //     if ('geolocation' in navigator === false) {
+        //         return onError(new Error('Geolocation is not supported by your browser.'));
+        //     }
+
+        //     // Use watchPosition instead.
+        //     return navigator.geolocation.watchPosition(onSuccess, onError);
+        // };
+
+        // function getCurrentLocationCords(onSuccess, onError) {
+        //     if (!('geolocation' in navigator)) {
+        //         onError(new Error('Geolocation is not supported by your browser.'));
+        //         return;
+        //     }
+
+        //     navigator.geolocation.getCurrentPosition(function(position) {
+        //         var lat = position.coords.latitude;
+        //         var lng = position.coords.longitude;
+        //         onSuccess({
+        //             lat,
+        //             lng
+        //         });
+        //     }, function(error) {
+        //         onError(new Error('Error getting user\'s location: ' + error.message));
+        //     });
+        // }
+
+
+        // const getPositionErrorMessage = code => {
+        //     switch (code) {
+        //         case 1:
+        //             return 'Permission denied.';
+        //         case 2:
+        //             return 'Position unavailable.';
+        //         case 3:
+        //             return 'Timeout reached.';
+        //         default:
+        //             return null;
+        //     }
+        // }
+
+        // function initMap() {
+        //     const map = createMap();
+        //     const marker = createMarker({
+        //         map
+        //     });
+
+
+
+        //     trackLocation({
+        //         onSuccess: ({
+        //             coords: {
+        //                 latitude: lat,
+        //                 longitude: lng
+        //             }
+        //         }) => {
+        //             console.log(lat, lng);
+        //             marker.setPosition({
+        //                 lat,
+        //                 lng
+        //             });
+        //             map.panTo({
+        //                 lat,
+        //                 lng
+        //             });
+        //         },
+        //         onError: err =>
+        //             alert(`Error: ${getPositionErrorMessage(err.code) || err.message}`)
+        //     });
+        //     // setInterval(() => {
+        //     //     console.log(getCurrentLocationCords());
+        //     //     marker.setPosition(getCurrentLocationCords());
+        //     // }, 3000);
+        // }
+
+
+
+
+
+
+
+
+        // function getCurrentLocation(onSuccess, onError) {
+        //     if (!('geolocation' in navigator)) {
+        //         onError(new Error('Geolocation is not supported by your browser.'));
+        //         return;
+        //     }
+
+        //     // Continuously watch for changes in the user's position
+        //     var watchId = navigator.geolocation.watchPosition(function(position) {
+        //         var lat = position.coords.latitude;
+        //         var lng = position.coords.longitude;
+        //         onSuccess({
+        //             lat,
+        //             lng
+        //         });
+        //     }, function(error) {
+        //         onError(new Error('Error getting user\'s location: ' + error.message));
+        //     });
+
+        //     // Optionally, return the watchId if you want to clear the watch later
+        //     return watchId;
+        // }
+        // var userMarker;
+
+        // function loadMapWithLocation(lat, lng) {
+        //     const map = new google.maps.Map(document.getElementById('map'), {
+        //         zoom: 10,
+        //         center: {
+        //             lat,
+        //             lng
+        //         },
+        //     });
+
+        //     // Add marker for user's location
+        //     userMarker = new google.maps.Marker({
+        //         position: {
+        //             lat,
+        //             lng
+        //         },
+        //         map: map,
+        //         title: 'Your Location'
+        //     });
+
+        //     // Optionally, you can perform additional map-related operations here
+        // }
+
+
+        // function initMap() {
+        //     // Call getCurrentLocation and then loadMapWithLocation
+        //     getCurrentLocation(function(coordinates) {
+        //         var map = loadMapWithLocation(coordinates.lat, coordinates.lng);
+
+        //         // Set up marker for the user's location
+        //         userMarker = new google.maps.Marker({
+        //             position: {
+        //                 lat: coordinates.lat,
+        //                 lng: coordinates.lng
+        //             },
+        //             map: map,
+        //             title: 'Your Location'
+        //         });
+
+        //         // Update marker and map center every second
+        //         setInterval(() => {
+        //             getCurrentLocation(function(newCoordinates) {
+        //                 userMarker.setPosition({
+        //                     lat: newCoordinates.lat,
+        //                     lng: newCoordinates.lng
+        //                 });
+        //             }, function(error) {
+        //                 console.error(error.message); // Handle error
+        //             });
+        //         }, 1000);
+        //     }, function(error) {
+        //         console.error(error.message); // Handle error
+        //     });
+        // }
 
 
 
@@ -176,17 +327,8 @@
 
 
 
-
-
-
-
-
-
-
-
-
-        var map;
-        var userMarker;
+        // var map;
+        // var userMarker;
 
         // function initMap() {
 
@@ -266,34 +408,34 @@
         //     }
         // }
 
-        // Load the map asynchronously
-        function loadMapScript() {
-            var script = document.createElement("script");
-            script.src =
-                "https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAP_KEY') }}&callback=initMap";
-            script.async = true;
-            document.body.appendChild(script);
-        }
+        // // Load the map asynchronously
+        // function loadMapScript() {
+        //     var script = document.createElement("script");
+        //     script.src =
+        //         "https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAP_KEY') }}&callback=initMap";
+        //     script.async = true;
+        //     document.body.appendChild(script);
+        // }
 
 
-        // Call the function to load the map
-        loadMapScript();
+        // // Call the function to load the map
+        // loadMapScript();
 
 
-        function updateMapWithUserLocation(userLatLng) {
-            if (!userMarker) {
-                userMarker = new google.maps.Marker({
-                    position: userLatLng,
-                    map: map,
-                    icon: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-                    title: 'Your Location'
-                });
-            } else {
-                userMarker.setPosition(userLatLng);
-            }
-            map.setCenter(userLatLng);
-            console.log("User's location updated:", userLatLng.lat(), userLatLng.lng());
-        }
+        // function updateMapWithUserLocation(userLatLng) {
+        //     if (!userMarker) {
+        //         userMarker = new google.maps.Marker({
+        //             position: userLatLng,
+        //             map: map,
+        //             icon: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+        //             title: 'Your Location'
+        //         });
+        //     } else {
+        //         userMarker.setPosition(userLatLng);
+        //     }
+        //     map.setCenter(userLatLng);
+        //     console.log("User's location updated:", userLatLng.lat(), userLatLng.lng());
+        // }
 
 
 
