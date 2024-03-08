@@ -101,7 +101,6 @@ class PointController extends Controller
         $point->title = $req->title;
 
         $point->distance = $req->distance;
-        $point->image = null; // Save the file path to the image field in your database
         $point->description = $req->description;
         $point->question = $req->question;
         $point->question_des = $req->question_des;

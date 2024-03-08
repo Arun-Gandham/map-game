@@ -17,10 +17,18 @@
         #map {
             height: 400px;
         }
+
+        #modal_dis_desc {
+            font-size: 20px;
+        }
+
+        .modal-body-outer {
+            padding: 2rem !important;
+        }
     </style>
-    <div class="container mt-5 ">
+    <div class="container mt-5  ">
         <button id="updateButton" onclick="updateLocation()" style="display: none;" class="mt-5">Update Location</button>
-        <div id="map" style="height: 400px;"></div>
+        <div id="map" style="height: 400px;" class="m-5"></div>
 
     </div>
     <!-- Modal 2-->
@@ -28,22 +36,22 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalToggleLabel2">Modal 2</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body modal-body-outer">
+                    <h3><strong id="modaldis"></strong> <span id="modal_dis_desc">to reach the point</span></h3>
+                    <h5 id="modalToggleLabel2">Modal 2</h5>
                     <img src="" id="modalImage" class="w-100">
-                    <p><span id="modaldis"></span> to reach the point</p>
+
                     <p id="modaldesc"></p>
                     <div class="qes-outer" id="qes-outer">
-                        <p id="modalque"></p>
+                        <strong id="modalque"></strong>
                         <p id="modaloptions"></p>
                     </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" data-bs-target="#modalToggle" data-bs-toggle="modal"
-                        data-bs-dismiss="modal">Back to first</button>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" id="submit_button" data-bs-target="#modalToggle"
+                            data-bs-toggle="modal" data-bs-dismiss="modal">Submit</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -61,21 +69,62 @@
                 $point->description,
                 $point->question,
                 $point->question_des,
+                implode(',', unserialize($point->options)),
             ];
         }
     @endphp
     <script type="text/javascript">
         // Function to populate modal with data 
-        function populateModal(title, image, desc, que, options, dis, radius) {
+        function populateModal(title, image, desc, que, options, dis, radius, options) {
             document.getElementById('modalImage').src = image;
             document.getElementById('modaldesc').innerHTML = desc;
             document.getElementById('modalque').innerHTML = que;
-            document.getElementById('modaloptions').innerHTML = options;
+
             document.getElementById('modaldis').innerHTML = dis;
             if (radius > dis) {
+                document.getElementById('modaldis').classList.add("text-success")
+                document.getElementById('modaldis').classList.remove("text-black")
+                document.getElementById('modal_dis_desc').innerHTML = "m. distance from point";
                 document.getElementById('qes-outer').style.display = "block";
+                document.getElementById('submit_button').style.cssText = "display: block !important;";
+                var radioOptionsDiv = document.getElementById('modaloptions');
+                radioOptionsDiv.innerHTML = "";
+                var optionsData = options.split(',');
+                // Loop through the options array to create radio buttons
+                optionsData.forEach(function(option) {
+                    // Create a div for each radio button with the class 'form-check'
+                    var formCheckDiv = document.createElement("div");
+                    formCheckDiv.classList.add("form-check");
+
+                    // Create a radio input element
+                    var radioInput = document.createElement("input");
+                    radioInput.type = "radio";
+                    radioInput.classList.add("form-check-input");
+                    radioInput.name = "options";
+                    radioInput.value = option;
+                    radioInput.id = "defaultRadio" + (options.indexOf(option) +
+                        1); // Unique ID for each radio button
+
+                    // Create a label for the radio button
+                    var label = document.createElement("label");
+                    label.classList.add("form-check-label");
+                    label.setAttribute("for", "defaultRadio" + (options.indexOf(option) +
+                        1)); // Link label to radio button
+                    label.textContent = option;
+
+                    // Append the radio button and label to the form-check div
+                    formCheckDiv.appendChild(radioInput);
+                    formCheckDiv.appendChild(label);
+
+                    // Append the form-check div to the radioOptionsDiv
+                    radioOptionsDiv.appendChild(formCheckDiv);
+                });
             } else {
+                document.getElementById('modaldis').classList.remove("text-success")
+                document.getElementById('modaldis').classList.add("text-black")
+                document.getElementById('modal_dis_desc').innerHTML = "m. to open this point";
                 document.getElementById('qes-outer').style.display = "none";
+                document.getElementById('submit_button').style.cssText = "display: none !important;";
             }
 
             $('#modalToggle2').modal('show');
@@ -147,7 +196,8 @@
                     lat: currentLat,
                     lng: currentLng
                 });
-                populateModal(location[0], location[5], location[6], location[7], location[8], dis, location[4]);
+                populateModal(location[0], location[5], location[6], location[7], location[8], dis, location[4],
+                    location[9]);
             });
         }
 
