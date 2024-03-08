@@ -32,7 +32,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <img src="" id="modalImage">
+                    <img src="" id="modalImage" class="w-100">
                     <p><span id="modaldis"></span> to reach the point</p>
                     <p id="modaldesc"></p>
                     <p id="modalque"></p>
@@ -54,7 +54,7 @@
                 explode(',', $point->lat_long)[1],
                 $point->type_obj->color ?? 'blue',
                 $point->distance,
-                $point->image,
+                asset($point->image),
                 $point->description,
                 $point->question,
                 $point->question_des,
@@ -77,8 +77,6 @@
             // Convert latitude and longitude to Google Maps LatLng objects
             var latLng1 = new google.maps.LatLng(coord1.lat, coord1.lng);
             var latLng2 = new google.maps.LatLng(coord2.lat, coord2.lng);
-
-            // Calculate the distance between the two coordinates
             var distance = google.maps.geometry.spherical.computeDistanceBetween(latLng1, latLng2);
 
             return Math.floor(distance); // Distance in meters
@@ -135,7 +133,7 @@
         function attachMarkerClickEvent(usermarker, location) {
             usermarker.addListener('click', function() {
                 var dis = calculateDistance({
-                    lat: location[2],
+                    lat: location[1],
                     lng: location[2]
                 }, {
                     lat: currentLat,

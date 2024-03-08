@@ -9,10 +9,10 @@ use Yajra\DataTables\Facades\DataTables;
 
 class PointController extends Controller
 {
-    public function add($id)
+    public function add($game_id)
     {
         $types = Type::all();
-        return view('templates.pages.forms.point_form', compact('types', 'id'));
+        return view('templates.pages.forms.point_form', compact('types', 'game_id'));
     }
     public function addSubmit(Request $req)
     {
@@ -40,8 +40,10 @@ class PointController extends Controller
                 $filename = time() . '_' . $file->getClientOriginalName();
                 $file->move(public_path("uploads/points/{$point->id}"), $filename);
                 $point->image = "uploads/points/{$point->id}/" . $filename;
+                $point->save();
+
             }
-            $point->save();
+
         }
 
         // Redirect back with success message

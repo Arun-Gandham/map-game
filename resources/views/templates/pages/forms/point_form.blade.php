@@ -124,7 +124,7 @@
                                 <div class="col-sm-9">
                                     <input type="hidden" name="id" value="{{ isset($point) ? $point->id : '' }}">
                                     <input type="hidden" name="game_id"
-                                        value="{{ isset($point) ? $point->game_id : '' }}">
+                                        value="{{ isset($point) ? $point->game_id : $game_id }}">
                                     <button type="submit"
                                         class="btn btn-primary me-sm-2 me-1 waves-effect waves-light">{{ isset($point) ? 'Update' : 'Submit' }}</button>
                                     <button class="btn btn-label-secondary waves-effect"><a
