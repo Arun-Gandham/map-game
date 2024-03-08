@@ -28,6 +28,8 @@ class PointController extends Controller
         $point->question = $req->question;
         $point->question_des = $req->question_des;
         $point->question_des = $req->question_des;
+        $point->answer = $req->answer;
+
         $options = [];
         foreach ($req->options as $key => $optionEach) {
             $options[$key] = $optionEach['option'];
@@ -99,6 +101,7 @@ class PointController extends Controller
         $point->type = $req->type;
         $point->lat_long = $req->latitude;
         $point->title = $req->title;
+        $point->answer = $req->answer;
 
         $point->distance = $req->distance;
         $point->description = $req->description;
@@ -123,6 +126,14 @@ class PointController extends Controller
 
         // Redirect back with success message
         return redirect()->route('game.edit', $req->game_id)->with('success', 'Successfully Update Point');
+    }
+
+    public function submitPoint(Request $req)
+    {
+        return $req->all();
+
+        $point = new Point();
+
     }
 
 }

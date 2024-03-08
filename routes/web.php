@@ -161,6 +161,8 @@ Route::get('/scores/datatables', [ScoresController::class, 'datatblesList'])->na
 
 Route::get('/map/{id}', [MapController::class, 'MapView'])->name('map.view');
 
+Route::post('/map/point/submit', [PointController::class, 'submitPoint'])->name('map.point.submit');
+
 Route::get('/show/game/{id}', [FrontPageController::class, 'showGameView'])->name('show.game.view');
 
 Route::post('/show/game/{id}/submit', [FrontPageController::class, 'showGameViewSubmit'])->name('show.game.submit');

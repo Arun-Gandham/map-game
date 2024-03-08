@@ -51,8 +51,8 @@
                         <p id="modaloptions"></p>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-primary" id="submit_button" data-bs-target="#modalToggle"
-                            data-bs-toggle="modal" data-bs-dismiss="modal">Submit</button>
+                        <input type="hidden" id="point_id">
+                        <button class="btn btn-primary" id="submit_button" onclick="submitPoint()">Submit</button>
                     </div>
                 </div>
             </div>
@@ -72,16 +72,17 @@
                 $point->question,
                 $point->question_des,
                 implode(',', unserialize($point->options)),
+                $point->id,
             ];
         }
     @endphp
     <script type="text/javascript">
         // Function to populate modal with data 
-        function populateModal(title, image, desc, que, options, dis, radius, options) {
+        function populateModal(title, image, desc, que, options, dis, radius, options, point_id) {
             document.getElementById('modalImage').src = image;
             document.getElementById('modaldesc').innerHTML = desc;
             document.getElementById('modalque').innerHTML = que;
-
+            document.getElementById('point_id').value = point_id;
             document.getElementById('modaldis').innerHTML = dis;
             if (radius > dis) {
                 document.getElementById('modaldis').classList.add("text-success")
@@ -93,7 +94,7 @@
                 radioOptionsDiv.innerHTML = "";
                 var optionsData = options.split(',');
                 // Loop through the options array to create radio buttons
-                optionsData.forEach(function(option) {
+                optionsData.forEach(function(option, index) {
                     // Create a div for each radio button with the class 'form-check'
                     var formCheckDiv = document.createElement("div");
                     formCheckDiv.classList.add("form-check");
@@ -103,7 +104,7 @@
                     radioInput.type = "radio";
                     radioInput.classList.add("form-check-input");
                     radioInput.name = "options";
-                    radioInput.value = option;
+                    radioInput.value = index;
                     radioInput.id = "defaultRadio" + (options.indexOf(option) +
                         1); // Unique ID for each radio button
 
@@ -130,6 +131,34 @@
             }
 
             $('#modalToggle2').modal('show');
+        }
+
+        function submitPoint() {
+            var checkedRadio = document.querySelector('input[name="options"]:checked');
+            if (checkedRadio) {
+                var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute(
+                    'content'); // Get CSRF token from meta tag
+                var postData = {
+                    point_id: document.getElementById('point_id').value,
+                    option: checkedRadio.value,
+                    _token: csrfToken, // Include CSRF token in the data
+                    // Add more key-value pairs as needed
+                };
+                $.ajax({
+                    url: "{{ route('map.point.submit') }}", // Replace with your API endpoint
+                    type: "POST",
+                    data: postData,
+                    success: function(response) {
+                        $('#modalToggle2').modal('hide');
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle error response
+                        alert("Error:", error);
+                    }
+                });
+            } else {
+                alert("Pleaes select your answer.");
+            }
         }
 
         function calculateDistance(coord1, coord2) {
@@ -186,7 +215,7 @@
             // Simulate click on the hidden button every 5 seconds
             setInterval(function() {
                 document.getElementById('updateButton').click();
-            }, 5000);
+            }, 3000);
         }
 
         function attachMarkerClickEvent(usermarker, location) {
@@ -199,7 +228,7 @@
                     lng: currentLng
                 });
                 populateModal(location[0], location[5], location[6], location[7], location[8], dis, location[4],
-                    location[9]);
+                    location[9], location[10]);
             });
         }
 

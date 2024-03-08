@@ -18,6 +18,7 @@ class Point extends Model
         'description',
         'question',
         'question_des',
+        'answer',
     ];
 
     public function type_obj()
