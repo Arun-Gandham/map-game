@@ -42,7 +42,7 @@
                 </div>
                 <div class="modal-body modal-body-outer">
                     <h3><strong id="modaldis"></strong> <span id="modal_dis_desc">to reach the point</span></h3>
-                    <h5 id="modalToggleLabel2">Modal 2</h5>
+                    <h5 id="modalLabel"></h5>
                     <img src="" id="modalImage" class="w-100">
 
                     <p id="modaldesc"></p>
@@ -80,6 +80,7 @@
     <script type="text/javascript">
         // Function to populate modal with data 
         function populateModal(title, image, desc, que, options, dis, radius, options, point_id) {
+            document.getElementById('modalLabel').innerHTML = title;
             document.getElementById('modalImage').src = image;
             document.getElementById('modaldesc').innerHTML = desc;
             document.getElementById('modalque').innerHTML = que;
@@ -105,7 +106,7 @@
                     radioInput.type = "radio";
                     radioInput.classList.add("form-check-input");
                     radioInput.name = "options";
-                    radioInput.value = index;
+                    radioInput.value = index + 1;
                     radioInput.id = "defaultRadio" + (options.indexOf(option) +
                         1); // Unique ID for each radio button
 

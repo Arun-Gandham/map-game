@@ -26,4 +26,9 @@ class Point extends Model
         return $this->hasOne(type::class, 'id', 'type');
     }
 
+    public function getPointsCount($point_id, $answer)
+    {
+        return TeamPoint::where('point_id', $point_id)->where('selected_option', $answer)->count();
+    }
+
 }

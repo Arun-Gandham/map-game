@@ -61,7 +61,7 @@ class PointController extends Controller
                 return $point->type_obj->name;
             })
             ->addColumn('points', function (Point $point) {
-                return '-';
+                return $point->getPointsCount($point->id, $point->answer);
             })
             ->addColumn('actions', function (Point $point) {
                 return '<div class="d-flex">
