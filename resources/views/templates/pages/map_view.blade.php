@@ -26,11 +26,13 @@
             padding: 2rem !important;
         }
     </style>
-    <div class="container mt-5  ">
-        <button id="updateButton" onclick="updateLocation()" style="display: none;" class="mt-5">Update Location</button>
-        <div id="map" style="height: 400px;" class="m-5"></div>
+    <section class="section-py ">
+        <div class="container">
+            <button id="updateButton" onclick="updateLocation()" style="display: none;">Update Location</button>
+            <div id="map" style="height: 400px;" class="m-5"></div>
 
-    </div>
+        </div>
+    </section>
     <!-- Modal 2-->
     <div class="modal fade" id="modalToggle2" aria-hidden="true" aria-labelledby="modalToggleLabel2" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
