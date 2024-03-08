@@ -35,8 +35,11 @@
                     <img src="" id="modalImage" class="w-100">
                     <p><span id="modaldis"></span> to reach the point</p>
                     <p id="modaldesc"></p>
-                    <p id="modalque"></p>
-                    <p id="modaloptions"></p>
+                    <div class="qes-outer" id="qes-outer">
+                        <p id="modalque"></p>
+                        <p id="modaloptions"></p>
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" data-bs-target="#modalToggle" data-bs-toggle="modal"
@@ -63,12 +66,17 @@
     @endphp
     <script type="text/javascript">
         // Function to populate modal with data 
-        function populateModal(title, image, desc, que, options, dis) {
+        function populateModal(title, image, desc, que, options, dis, radius) {
             document.getElementById('modalImage').src = image;
             document.getElementById('modaldesc').innerHTML = desc;
             document.getElementById('modalque').innerHTML = que;
             document.getElementById('modaloptions').innerHTML = options;
             document.getElementById('modaldis').innerHTML = dis;
+            if (radius > dis) {
+                document.getElementById('qes-outer').style.display = "block";
+            } else {
+                document.getElementById('qes-outer').style.display = "none";
+            }
 
             $('#modalToggle2').modal('show');
         }
@@ -139,7 +147,7 @@
                     lat: currentLat,
                     lng: currentLng
                 });
-                populateModal(location[0], location[5], location[6], location[7], location[8], dis);
+                populateModal(location[0], location[5], location[6], location[7], location[8], dis, location[4]);
             });
         }
 
