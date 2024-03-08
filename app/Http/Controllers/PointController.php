@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Point;
+use App\Models\TeamPoint;
 use App\Models\Type;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -16,7 +17,6 @@ class PointController extends Controller
     }
     public function addSubmit(Request $req)
     {
-        // return $req->all();
         $point = new Point();
         $point->type = $req->type;
         $point->lat_long = $req->latitude;
@@ -130,9 +130,14 @@ class PointController extends Controller
 
     public function submitPoint(Request $req)
     {
-        return $req->all();
-
-        $point = new Point();
+        $point = new TeamPoint();
+        $point->point_id = $req->point_id;
+        $point->team_id = $req->team_id;
+        $point->selected_option = $req->option;
+        if ($point->save()) {
+            return response()->json(['message' => 'Success'], 200);
+        }
+        return response()->json(['message' => 'Error'], 505);
 
     }
 

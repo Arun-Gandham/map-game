@@ -159,7 +159,7 @@ Route::get('/scores', [ScoresController::class, 'List'])->name('score.list');
 
 Route::get('/scores/datatables', [ScoresController::class, 'datatblesList'])->name('score.list.datatbles');
 
-Route::get('/map/{id}', [MapController::class, 'MapView'])->name('map.view');
+Route::get('/map/{id}/{team_id}', [MapController::class, 'MapView'])->name('map.view');
 
 Route::post('/map/point/submit', [PointController::class, 'submitPoint'])->name('map.point.submit');
 

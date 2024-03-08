@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Game;
+use App\Models\Team;
 use Illuminate\Http\Request;
 
 class FrontPageController extends Controller
@@ -17,6 +18,13 @@ class FrontPageController extends Controller
 
     public function showGameViewSubmit(Request $req, $id)
     {
-        return redirect()->route('map.view', $id);
+        $team = new Team();
+        $team->name = $req->team_name;
+        $team->game_id = $id;
+        if ($team->save()) {
+            return redirect()->route('map.view', [$id, $team->id]);
+        }
+        return "Something went wrong.";
+
     }
 }
