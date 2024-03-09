@@ -154,8 +154,15 @@
                                 <div class="col-12">
                                     <label for="typeSelect" class="col-sm-3 col-form-label">Answer No.</label>
                                     <div class="col-sm-11">
-                                        <input type="text" class="form-control" placeholder="Answer" name="answer"
+                                        <input type="number" class="form-control" placeholder="Answer" name="answer"
                                             value="{{ isset($point) ? $point->answer : '' }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <label for="typeSelect" class="col-sm-3 col-form-label">Score</label>
+                                    <div class="col-sm-11">
+                                        <input type="number" class="form-control" placeholder="Score" name="score"
+                                            value="{{ isset($point) ? $point->score : '' }}" required>
                                     </div>
                                 </div>
                             </div>
