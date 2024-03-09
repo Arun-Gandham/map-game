@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Game;
+use Hashids\Hashids;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -29,6 +30,8 @@ class GameController extends Controller
 
     public function datatblesList(Request $request)
     {
+        $hashids = new Hashids(env('HASH_SALT_ID'), 20);
+
         $data = Game::select(['id', 'name', 'max_time', 'image', 'description'])->orderBy('id', 'desc');
         return DataTables::of($data)
             ->addColumn('actions', function (Game $game) {
@@ -43,8 +46,8 @@ class GameController extends Controller
             ->addColumn('type_name', function (Game $game) {
                 return $game->type;
             })
-            ->addColumn('link', function (Game $game) {
-                return '<a href="' . route("show.game.view", $game->id) . '" class="mx-2">Frontend Link</a>';
+            ->addColumn('link', function (Game $game) use ($hashids) {
+                return '<a href="' . route("show.game.view", $hashids->encode($game->id)) . '" class="mx-2">Frontend Link</a>';
             })
             ->addColumn('scores', function (Game $game) {
                 return '<a href="" class="mx-2">Scores</a>';

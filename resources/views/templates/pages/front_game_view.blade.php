@@ -44,11 +44,14 @@
                             <li data-bs-target="#carouselExample" data-bs-slide-to="2"></li>
                         </ol> --}}
                         <div class="carousel-inner">
-                            @foreach (unserialize($game->image) as $key => $image)
-                                <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
-                                    <img class="d-block w-100 h-50" src="{{ asset($image) }}" alt="First slide" />
-                                </div>
-                            @endforeach
+                            @if (count(unserialize($game->image)))
+                                @foreach (unserialize($game->image) as $key => $image)
+                                    <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
+                                        <img class="d-block w-100 h-50" src="{{ asset($image) }}" alt="First slide" />
+                                    </div>
+                                @endforeach
+                            @endif
+
                         </div>
                         <a class="carousel-control-prev" href="#carouselExample" role="button" data-bs-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
