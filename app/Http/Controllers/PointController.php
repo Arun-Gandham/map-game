@@ -123,8 +123,6 @@ class PointController extends Controller
             }
             $point->save();
         }
-
-        // Redirect back with success message
         return redirect()->route('game.edit', $req->game_id)->with('success', 'Successfully Update Point');
     }
 
@@ -138,7 +136,6 @@ class PointController extends Controller
             return response()->json(['message' => 'Success'], 200);
         }
         return response()->json(['message' => 'Error'], 505);
-
     }
 
 }

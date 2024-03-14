@@ -8,14 +8,14 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ScoresController extends Controller
 {
-    public function list()
+    public function list($id)
     {
-        return view('templates.pages.scores_list');
+        return view('templates.pages.scores_list', compact('id'));
     }
 
-    public function datatblesList(Request $request)
+    public function datatblesList(Request $request, $id)
     {
-        $data = Score::orderBy('created_at', 'desc'); // Replace with your model and desired columns
+        $data = Score::where('game_id', $id)->orderBy('created_at', 'desc')->get(); // Replace with your model and desired columns
         return DataTables::of($data)
             ->addColumn('actions', function (Score $score) {
                 return '<div class="d-flex">

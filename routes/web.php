@@ -155,9 +155,9 @@ Route::get('/viewgames/datatables', [GameController::class, 'datatblesList'])->n
 
 //Scores
 
-Route::get('/scores', [ScoresController::class, 'List'])->name('score.list');
+Route::get('/scores/{id}', [ScoresController::class, 'List'])->name('score.list');
 
-Route::get('/scores/datatables', [ScoresController::class, 'datatblesList'])->name('score.list.datatbles');
+Route::get('/scores/datatables/{id}', [ScoresController::class, 'datatblesList'])->name('score.list.datatbles');
 
 Route::get('/map/{id}/{team_id}', [MapController::class, 'MapView'])->name('map.view');
 

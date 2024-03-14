@@ -80,7 +80,7 @@
                 $('#data-table').DataTable({
                     processing: true,
                     serverSide: true,
-                    ajax: '{{ route('score.list.datatbles') }}',
+                    ajax: '{{ route('score.list.datatbles', $id) }}',
                     columns: [{
                             data: 'created_at'
                         },

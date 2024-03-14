@@ -144,8 +144,7 @@
                     point_id: document.getElementById('point_id').value,
                     option: checkedRadio.value,
                     team_id: document.getElementById('team_id').value,
-                    _token: csrfToken, // Include CSRF token in the data
-                    // Add more key-value pairs as needed
+                    _token: csrfToken,
                 };
                 $.ajax({
                     url: "{{ route('map.point.submit') }}", // Replace with your API endpoint

@@ -50,7 +50,7 @@ class GameController extends Controller
                 return '<a href="' . route("show.game.view", $hashids->encode($game->id)) . '" class="mx-2">Frontend Link</a>';
             })
             ->addColumn('scores', function (Game $game) {
-                return '<a href="" class="mx-2">Scores</a>';
+                return '<a href="' . route("score.list", $game->id) . '" class="mx-2">Scores</a>';
             })
             ->rawColumns(['actions', 'link', 'scores'])
             ->make(true);

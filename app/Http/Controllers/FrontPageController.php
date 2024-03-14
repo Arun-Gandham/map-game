@@ -32,6 +32,5 @@ class FrontPageController extends Controller
             return redirect()->route('map.view', [$hashids->encode($id), $hashids->encode($team->id)]);
         }
         return "Something went wrong.";
-
     }
 }
