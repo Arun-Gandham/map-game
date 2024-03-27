@@ -103,7 +103,6 @@
     </div>
     <!-- DataTable with Buttons -->
     @if (isset($game))
-    
         <div class="card">
 
             <div class="card-datatable table-responsive pt-0">
@@ -122,7 +121,7 @@
                             <th>Distance</th>
                             <th>Points</th>
                             <th>Actions</th>
-                           
+
                         </tr>
                     </thead>
                 </table>
@@ -147,13 +146,13 @@
                             data: 'distance'
                         },
                         {
-                            data: 'points'
+                            data: 'score'
                         },
                         {
                             data: 'actions'
                         }
-                       
-                       
+
+
                     ]
                 });
             });

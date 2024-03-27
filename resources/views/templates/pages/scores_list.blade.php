@@ -85,19 +85,19 @@
                             data: 'created_at'
                         },
                         {
-                            data: 'game_id'
+                            data: 'game_name'
                         },
                         {
-                            data: 'group_id'
+                            data: 'name'
                         },
                         {
-                            data: 'team_name'
+                            data: 'name'
                         },
                         {
-                            data: 'score'
+                            data: 'name'
                         },
                         {
-                            data: 'time'
+                            data: 'name'
                         },
                         {
                             data: 'actions'
